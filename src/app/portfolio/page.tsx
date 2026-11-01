@@ -1,0 +1,177 @@
+import { PortfolioPageClient } from '@/components/portfolio/PortfolioPageClient'
+import { StarfieldBackground } from '@/components/site/StarfieldBackground'
+import { AppLayoutPage } from '@/components/site/templates/AppLayoutPage'
+
+import { getContents } from '@/services'
+import { getViewsBatch } from '@/services/pageviews'
+
+import { SITE_NAME, SITE_URL } from '@/libs/constants/site'
+import { generateOgImage } from '@/libs/metapage'
+import { getNewestPortfolio } from '@/libs/sorters'
+
+import type { Portfolio } from 'me'
+import type { Metadata } from 'next'
+
+const PORTFOLIO_URL = `${SITE_URL}/portfolio`
+const PORTFOLIO_OG_IMAGE = generateOgImage({
+  title: 'Portfolio',
+  subTitle: 'Selected projects across software, games, and graphics',
+  type: 'portfolio'
+})
+const PORTFOLIO_OG_ALT = `Portfolio - ${SITE_NAME} - AI & 3D Graphics Projects`
+
+export const metadata: Metadata = {
+  title: `Portfolio - ${SITE_NAME}`,
+  description:
+    "Here is a selection of my personal works. I'm always open to feedback and opportunities to collaborate!",
+  keywords: [
+    'Ahnaf An Nafee portfolio',
+    'ahnafnafee portfolio',
+    'PhD AI 3D Graphics portfolio',
+    'Computer Science PhD portfolio',
+    'AI research projects',
+    '3D Computer Graphics projects',
+    'Machine Learning portfolio',
+    'Computer Vision projects',
+    'Generative AI projects',
+    'Rendering Pipeline projects',
+    'DevOps engineering portfolio',
+    'Kubernetes projects',
+    'OpenShift projects',
+    'Cloud Infrastructure portfolio',
+    'AWS cloud solutions',
+    'Docker containerization',
+    'CI/CD pipeline projects',
+    'Infrastructure automation',
+    'Game development portfolio',
+    'Unity 3D projects',
+    'Unreal Engine projects',
+    '3D modeling projects',
+    'Game engine development',
+    'Interactive technology',
+    'Software engineering portfolio',
+    'Full stack development',
+    'React Native apps',
+    'Python projects',
+    'Go programming projects',
+    'Java applications',
+    'Kotlin development',
+    'Tech startup CTO experience',
+    'Technical leadership portfolio',
+    'George Mason University research',
+    'GMU PhD projects',
+    'Academic research portfolio',
+    'Computer graphics research',
+    'Human computer interaction',
+    'Immersive technology projects',
+    'Digital worlds development',
+    'Research publications',
+    'Open source contributions',
+    'GitHub projects',
+    'ahnafnafee.dev portfolio',
+    'ahnafnafee GitHub'
+  ],
+  alternates: {
+    canonical: PORTFOLIO_URL
+  },
+  openGraph: {
+    title: `Portfolio - ${SITE_NAME}`,
+    description:
+      "Here is a selection of my personal works. I'm always open to feedback and opportunities to collaborate!",
+    url: PORTFOLIO_URL,
+    siteName: SITE_NAME,
+    images: [{ url: PORTFOLIO_OG_IMAGE, width: 1200, height: 630, alt: PORTFOLIO_OG_ALT, type: 'image/png' }],
+    locale: 'en_US',
+    type: 'website'
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: `Portfolio - ${SITE_NAME}`,
+    description:
+      "Here is a selection of my personal works. I'm always open to feedback and opportunities to collaborate!",
+    images: [{ url: PORTFOLIO_OG_IMAGE, alt: PORTFOLIO_OG_ALT }]
+  }
+}
+
+async function getPortfolioData() {
+  const response = await getContents<Portfolio>('/portfolio')
+
+  const allHeaders = response.map((d) => d.header)
+
+  // Direct DB read instead of an HTTP hop through the batch route.
+  const views = await getViewsBatch(allHeaders.map((h) => h.slug))
+  const withViews = allHeaders.map((h) => ({ ...h, views: views[h.slug] ?? 0 }))
+
+  const portfolios = [...withViews].sort(getNewestPortfolio)
+  const softwarePortfolios = withViews.filter((f) => f.category === 'software').sort(getNewestPortfolio)
+  const gamePortfolios = withViews.filter((f) => f.category !== 'software').sort(getNewestPortfolio)
+
+  return {
+    portfolios,
+    softwarePortfolios,
+    gamePortfolios
+  }
+}
+
+export default async function PortfolioPage() {
+  const { portfolios, softwarePortfolios, gamePortfolios } = await getPortfolioData()
+
+  const webpageId = `${PORTFOLIO_URL}#webpage`
+  const breadcrumbId = `${PORTFOLIO_URL}#breadcrumb`
+
+  const graphJsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'CollectionPage',
+        '@id': webpageId,
+        url: PORTFOLIO_URL,
+        name: `Portfolio - ${SITE_NAME}`,
+        description:
+          "Here is a selection of my personal works. I'm always open to feedback and opportunities to collaborate!",
+        inLanguage: 'en-US',
+        isPartOf: { '@type': 'WebSite', url: SITE_URL },
+        primaryImageOfPage: {
+          '@type': 'ImageObject',
+          url: PORTFOLIO_OG_IMAGE,
+          width: 1200,
+          height: 630,
+          caption: PORTFOLIO_OG_ALT
+        },
+        breadcrumb: { '@id': breadcrumbId },
+        mainEntity: {
+          '@type': 'ItemList',
+          numberOfItems: portfolios.length,
+          itemListElement: portfolios.slice(0, 20).map((p, i) => ({
+            '@type': 'ListItem',
+            position: i + 1,
+            url: `${SITE_URL}/portfolio/${p.slug}`,
+            name: p.title
+          }))
+        }
+      },
+      {
+        '@type': 'BreadcrumbList',
+        '@id': breadcrumbId,
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
+          { '@type': 'ListItem', position: 2, name: 'Portfolio', item: PORTFOLIO_URL }
+        ]
+      }
+    ]
+  }
+
+  return (
+    <>
+      <StarfieldBackground />
+      <AppLayoutPage>
+        <script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify(graphJsonLd) }} />
+        <PortfolioPageClient
+          portfolios={portfolios}
+          softwarePortfolios={softwarePortfolios}
+          gamePortfolios={gamePortfolios}
+        />
+      </AppLayoutPage>
+    </>
+  )
+}

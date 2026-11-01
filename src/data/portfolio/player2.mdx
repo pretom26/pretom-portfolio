@@ -1,0 +1,115 @@
+---
+title: 'Player 2'
+date: '12/01/2022'
+updated: '07/14/2026'
+featured: true
+category: 'software'
+summary: 'An AI-assisted matchmaking and social platform for gamers that I revamped, shipped across app stores, and now operate and scale.'
+image: '/images/player2-og.png'
+stack:
+  [
+    'react-native',
+    'expo',
+    'react',
+    'typescript',
+    'next.js',
+    'java',
+    'spring-boot',
+    'postgresql',
+    'aws',
+    'docker',
+    'ci-cd',
+    'android',
+    'ios'
+  ]
+link:
+  {
+    appStore: 'https://apps.apple.com/us/app/player-2/id1619655364',
+    playStore: 'https://play.google.com/store/apps/details?id=com.dynasty11.player2app&hl=en_US',
+    live: 'https://player2app.com'
+  }
+---
+
+## Overview
+
+Player 2 is an AI-assisted matchmaking and social platform for gamers across PC, console, and mobile. Instead of pairing people by rank, it matches on personality and playstyle from a short in-app survey, and it only suggests games players actually own. As the engineer behind its current release, I revamped Player 2 end to end at Dynasty 11 Studios, shipped it across the App Store and Play Store, and now operate and scale the entire technical stack, from the backend and the apps down to the infrastructure and the app store presence.
+
+<AppDownloadCTA
+  heading='Get Player 2'
+  subtext='Free on iOS and Android.'
+  appStore='https://apps.apple.com/us/app/player-2/id1619655364'
+  playStore='https://play.google.com/store/apps/details?id=com.dynasty11.player2app'
+/>
+
+## What I Built
+
+Player 2 spans eight repositories and every layer of the stack:
+
+- **Mobile app** in Expo and React Native, shipping in four languages with full right-to-left support for Arabic, released through EAS with over-the-air patch updates.
+- **Web client** as a TanStack Start app on a single Cloudflare Worker, serving both the marketing site and a browser version of the product.
+- **Backend** in Spring Boot 4 and Java 25, built as a modular monolith on PostgreSQL 17, with real-time chat and presence over STOMP WebSockets and Redis.
+- **Infrastructure** self-hosted on Hetzner and Coolify, with Terraform, Grafana Cloud, and OpenTelemetry for provisioning and observability, all behind Cloudflare.
+- **Supporting services** including an admin console, a self-built deep-link service that replaced a paid vendor, and the full marketing and app store optimization workstream.
+
+## Highlights
+
+- Personality-based matchmaking using cosine and game-library similarity with a diversity re-rank.
+- A transparent, two-stage recommendation feed that learns from seen, tap, and dismiss signals.
+- Self-hosted replacements for paid platform, deep-link, and monitoring services.
+- App store optimization with listings localized into nine languages and a repeatable Figma screenshot pipeline.
+
+## Full Write-Up
+
+I broke down the whole effort across infrastructure, product, and marketing in a dedicated post: [Revamping and Scaling Player 2](/blog/building-player-2-sole-developer).
+
+## Press
+
+- [Dynasty 11 Studios Announces Foray into Social Networking with the Player 2 Platform for Gamers](https://markets.businessinsider.com/news/stocks/dynasty-11-studios-announces-foray-into-social-networking-with-the-player-2-platform-for-gamers-1031485933)
+
+## Screenshots
+
+<div className='not-prose my-6 grid grid-cols-2 gap-3 sm:grid-cols-3'>
+  <img
+    src='/images/player2/player2-matchmaking.webp'
+    alt='Player 2 matchmaking screen suggesting a compatible player'
+    loading='lazy'
+    className='w-full rounded-xl border border-gray-200 dark:border-gray-800'
+  />
+  <img
+    src='/images/player2/player2-communities.webp'
+    alt='Player 2 Playgrounds communities screen'
+    loading='lazy'
+    className='w-full rounded-xl border border-gray-200 dark:border-gray-800'
+  />
+  <img
+    src='/images/player2/player2-gamehub.webp'
+    alt='Player 2 GameHub personalized social feed'
+    loading='lazy'
+    className='w-full rounded-xl border border-gray-200 dark:border-gray-800'
+  />
+  <img
+    src='/images/player2/player2-game-library.webp'
+    alt='Player 2 game library with critic and player scores'
+    loading='lazy'
+    className='w-full rounded-xl border border-gray-200 dark:border-gray-800'
+  />
+  <img
+    src='/images/player2/player2-lfg.webp'
+    alt='Player 2 Looking for Group hub'
+    loading='lazy'
+    className='w-full rounded-xl border border-gray-200 dark:border-gray-800'
+  />
+  <img
+    src='/images/player2/player2-player-card.webp'
+    alt='Customizable Player 2 profile and Player Card'
+    loading='lazy'
+    className='w-full rounded-xl border border-gray-200 dark:border-gray-800'
+  />
+</div>
+
+<AppDownloadCTA
+  heading='Ready to play?'
+  subtext='Download Player 2 free on iOS and Android.'
+  appStore='https://apps.apple.com/us/app/player-2/id1619655364'
+  playStore='https://play.google.com/store/apps/details?id=com.dynasty11.player2app'
+/>

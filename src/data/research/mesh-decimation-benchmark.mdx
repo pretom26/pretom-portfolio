@@ -1,0 +1,224 @@
+---
+title: 'Performance Analysis of 3D Mesh Simplification Algorithms: QEM vs. Vertex Clustering on CAD and Organic Models'
+summary: 'A 2×2×2 factorial study comparing Quadric Error Metrics and Vertex Clustering across CAD and organic meshes — Clustering is 60–80× faster, while QEM trades speed for fidelity that collapses on sparse CAD geometry at 90% reduction.'
+abstract: >-
+  High-fidelity 3D models often exceed the rendering budgets of real-time applications, necessitating
+  effective mesh simplification algorithms. However, current benchmarks often overlook the impact of
+  input mesh topology, specifically the distinction between structured CAD models and unstructured
+  organic scans. This paper presents a comparative analysis of two fundamental simplification
+  algorithms: Quadric Error Metrics (QEM) and Vertex Clustering. We evaluate these algorithms across
+  two distinct datasets (ModelNet40 for CAD and Thingi10K for Organic models) at varying levels of
+  decimation (50% and 90%). Using a rigorous factorial experimental design, we quantify Execution
+  Time and Geometric Fidelity (Hausdorff Distance). We demonstrate that Vertex Clustering is orders
+  of magnitude faster (p < 0.001) and remarkably stable across all datasets. Conversely, while QEM
+  offers superior accuracy at moderate reduction levels, we identify a significant performance
+  degradation on organic meshes and a catastrophic loss of geometric fidelity on sparse CAD models
+  at high decimation levels. Our findings establish that the optimal choice of simplification
+  strategy depends heavily on the source topology and the target decimation ratio.
+authors:
+  - name: 'Ahnaf An Nafee'
+    url: 'https://www.ahnafnafee.dev'
+    email: 'aannafee@gmu.edu'
+    affiliations: [1]
+    corresponding: true
+affiliations:
+  - name: 'George Mason University'
+    location: 'Fairfax, Virginia, USA'
+    url: 'https://www.gmu.edu'
+venue:
+  name: 'CS700 — Research Methodology in Computer Science, Course Project'
+  short: 'GMU CS700'
+  year: 2025
+  status: 'tech-report'
+published: '12/08/2025'
+featured: true
+new: false
+section: 'others'
+category: 'graphics'
+topics: ['3D Graphics', 'Computer Graphics', 'Mesh Simplification', 'Computer Geometry', 'Statistical Analysis']
+keywords:
+  - mesh decimation
+  - QEM
+  - quadric error metrics
+  - vertex clustering
+  - PyMeshLab
+  - statistical analysis
+  - ANOVA
+  - Hausdorff distance
+  - 3D mesh simplification
+  - computer graphics research
+  - mesh optimization
+  - polygon reduction
+  - ModelNet40
+  - Thingi10k
+  - level of detail
+  - performance analysis
+thumbnail: 'https://ik.imagekit.io/8ieg70pvks/blog/mesh-decimation.png?updatedAt=1778868186451'
+teaser: 'https://raw.githubusercontent.com/ahnafnafee/mesh-decimation-benchmark/main/Report/figures/teaser.png'
+teaserCaption: 'Visual comparison of decimation results. Top row: clean CAD models (ModelNet40). Bottom row: organic scanned meshes (Thingi10k). QEM struggles with CAD topology at 90% reduction while Clustering preserves global shape.'
+links:
+  paper: 'https://www.researchgate.net/publication/400103838_Performance_Analysis_of_3D_Mesh_Simplification_Algorithms_QEM_vs_Vertex_Clustering_on_CAD_and_Organic_Models'
+  code: 'https://github.com/ahnafnafee/mesh-decimation-benchmark'
+  researchGate: 'https://www.researchgate.net/publication/400103838_Performance_Analysis_of_3D_Mesh_Simplification_Algorithms_QEM_vs_Vertex_Clustering_on_CAD_and_Organic_Models'
+identifiers:
+  researchGateId: '400103838'
+bibtex: |
+  @misc{annafee2025meshsimplification,
+    author      = {Ahnaf {An Nafee}},
+    title       = {Performance Analysis of 3D Mesh Simplification Algorithms:
+                   QEM vs. Vertex Clustering on CAD and Organic Models},
+    year        = {2025},
+    institution = {George Mason University},
+    note        = {CS700 Course Project},
+    url         = {https://www.researchgate.net/publication/400103838_Performance_Analysis_of_3D_Mesh_Simplification_Algorithms_QEM_vs_Vertex_Clustering_on_CAD_and_Organic_Models}
+  }
+related: []
+---
+
+This study provides empirical evidence that mesh simplification algorithm selection must be informed by **both** the source topology and the target decimation ratio. Given the widespread use of mesh decimation in game engines, VR/AR applications, and 3D printing pipelines, understanding when to use which algorithm is critical.
+
+---
+
+## Key Findings
+
+Our results support all three research hypotheses with strong statistical significance:
+
+**Finding 1: Universal Speed Advantage.**
+Vertex Clustering is **60–80× faster** than QEM across all conditions ($p < 0.001$). For a typical organic model with 300k vertices, Clustering completes in ~0.03 seconds (suitable for real-time LOD at 60 FPS), while QEM requires ~1.29 seconds (acceptable only for offline preprocessing).
+
+**Finding 2: Topology-Conditional Fidelity.**
+QEM's geometric accuracy advantage is **highly conditional**. It offers superior fidelity on organic surfaces (mean Hausdorff Distance = 0.006 vs. 0.013 for Clustering), effectively halving the error. However, it **catastrophically fails** on sparse CAD geometries at 90% decimation (mean HD = 0.034), performing significantly worse than Clustering.
+
+**Finding 3: Stability vs. Optimality Trade-off.**
+Clustering exhibits remarkable error stability (coefficient of variation $< 15\%$) across all conditions, whereas QEM's error variance increases by 300% when applied to unsuitable topologies.
+
+---
+
+## Methodology
+
+We utilized a $2 \times 2 \times 2$ factorial design:
+
+- **Factor 1: Algorithm** — Quadric Edge Collapse Decimation (QEM) vs. Vertex Clustering
+- **Factor 2: Mesh Type** — Clean CAD (ModelNet40) vs. Organic Scanned (Thingi10k)
+- **Factor 3: Decimation Level** — Moderate (50%) vs. Extreme (90%)
+
+### Datasets
+
+We curated a balanced dataset of **30 models** to mitigate selection bias:
+
+- **Clean CAD**: 15 models from [ModelNet40](https://modelnet.cs.princeton.edu/). Man-made objects (airplanes, chairs, guitars) with sharp edges, large planar surfaces, and 18k–80k vertices.
+- **Organic Scanned**: 15 models from [Thingi10k](https://ten-thousand-models.appspot.com/). 3D scans of sculptures, animals, and characters with smooth curvatures, 10k–600k vertices, and surface noise typical of scanning.
+
+### Metrics
+
+1. **Execution Time**: Wall-clock time with warm-up runs and 5 measured repetitions using `time.perf_counter_ns()`
+2. **Geometric Fidelity**: Two-sided Hausdorff Distance $\max(d(A,B), d(B,A))$, measuring maximum deviation between original mesh $A$ and simplified mesh $B$
+
+### Statistical Analysis
+
+Three-way ANOVA with Tukey HSD post-hoc tests. Significance level $\alpha = 0.05$, 95% confidence intervals. Total of **120 observations** across the factorial design.
+
+---
+
+## Algorithm Background
+
+### Quadric Error Metrics (QEM)
+
+QEM is a high-quality decimation algorithm that iteratively collapses edges to minimize geometric error. Each face incident to a vertex defines a plane, and the error at a vertex is the sum of squared distances to all incident planes:
+
+$$\Delta(v) = v^T Q v$$
+
+where $Q$ is a symmetric $4 \times 4$ matrix. For an edge collapse $(v_1, v_2) \to \bar{v}$, the new vertex inherits combined quadrics:
+
+$$\bar{Q} = Q_1 + Q_2$$
+
+The optimal placement minimizes $\bar{v}^T \bar{Q} \bar{v}$.
+
+**Complexity**: $O(n \log n)$ due to priority queue maintenance.
+
+### Vertex Clustering
+
+Vertex Clustering is a fast, low-memory technique using spatial hashing:
+
+1. Compute bounding box and divide into uniform 3D grid cells
+2. Map each vertex to cell index: $\text{cell}(v) = \lfloor (v - v_{\text{min}}) / \delta \rfloor$
+3. Collapse all vertices within a cell to representative vertex
+4. Remove degenerate faces
+
+**Complexity**: $O(n)$ with constant-time bin assignments.
+
+---
+
+## Results
+
+### Summary Statistics
+
+| Algorithm      | Mesh Type              | Time (s)      | Hausdorff Dist. |
+| :------------- | :--------------------- | :------------ | :-------------- |
+| **Clustering** | Clean CAD (ModelNet40) | 0.005 ± 0.004 | 0.006 ± 0.006   |
+| **Clustering** | Organic (Thingi10k)    | 0.032 ± 0.062 | 0.013 ± 0.012   |
+| **QEM**        | Clean CAD (ModelNet40) | 0.259 ± 0.178 | 0.034 ± 0.061   |
+| **QEM**        | Organic (Thingi10k)    | 1.290 ± 1.718 | 0.006 ± 0.007   |
+
+<p className='mb-8 text-center text-sm text-gray-500 dark:text-gray-400'>
+  Table 1: Mean ± SD across all decimation levels. Lower Hausdorff Distance indicates better geometric preservation.
+</p>
+
+### Execution Time Analysis
+
+The three-way ANOVA revealed a statistically significant main effect for Algorithm:
+
+$$F(1,112) \approx 22.89, \quad p < 0.001$$
+
+The **Algorithm × Mesh Type interaction** was also significant ($F(1,112) \approx 10.09$, $p = 0.002$):
+
+- Clustering: under 0.05s regardless of input complexity
+- QEM: 0.26s (CAD) → 1.29s (Organic) — a **~40× performance gap**
+
+This gap arises from QEM's priority queue maintenance requiring $O(\log n)$ heap updates per edge collapse, whereas Clustering performs constant-time spatial hashing.
+
+### Geometric Fidelity Analysis
+
+Significant effects for Algorithm ($p=0.008$), Mesh Type ($p=0.011$), and Decimation Level ($p=0.001$). The **Algorithm × Type interaction** was significant ($p=0.004$).
+
+**Critical finding**: QEM catastrophically fails on CAD models at 90% decimation.
+
+Failure case analysis:
+
+- **Wing Collapse (Airplane Model)**: QEM eliminates thin planar surfaces defining wings—quadric error cannot distinguish "safe" interior edges from silhouette-critical boundaries
+- **Leg Detachment (Chair Model)**: Supporting columns with 200–300 vertices disappear as QEM prioritizes the larger seat surface
+
+Clustering's voxelization maintains coarse volumetric approximation—appearing "blocky" but preserving global topology.
+
+### Effect Size Analysis
+
+Cohen's $d$ confirms practical significance:
+
+**Execution Time:**
+
+- Algorithm effect: $d = 0.81$ (large)
+- Mesh Type effect: $d = 0.54$ (medium)
+- Algorithm × Type interaction: $d = 1.04$ (very large)
+
+**Hausdorff Distance:**
+
+- QEM on CAD vs. Clustering on CAD at 90%: $d = 0.98$ (very large)
+
+---
+
+## Practical Recommendations
+
+- **Real-time VR/AR**: Use Clustering exclusively ($<16$ms frame budget)
+- **Offline CAD simplification at 90%**: Prefer Clustering to avoid topological collapse
+- **High-fidelity organic reduction at 50%**: QEM provides optimal surface preservation
+- **Unknown topology pipelines**: Implement hybrid routing based on vertex density
+
+The "one-size-fits-all" approach is suboptimal. Future pipelines should incorporate **topology detection** as preprocessing to route meshes to algorithm-appropriate strategies.
+
+---
+
+## Limitations
+
+- **Non-normality**: Shapiro-Wilk tests revealed deviations ($W \approx 0.53$, $p < 0.001$). ANOVA is generally robust, but p-values should be interpreted with caution.
+- **Sample Size**: $N=120$ (30 models × 2 algorithms × 2 decimation levels)
+- **Single Error Metric**: Only Hausdorff Distance measured

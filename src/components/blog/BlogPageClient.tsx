@@ -1,0 +1,38 @@
+'use client'
+
+import { BlogList } from '@/components/content'
+import { EmptyResult } from '@/components/site/common'
+import { Searchbar } from '@/components/site/inputs'
+import { Hero } from '@/components/site/templates'
+
+import { useSearchBlog } from '@/hooks'
+
+import type { Blog } from 'me'
+
+type BlogPageClientProps = {
+  allBlogs: Array<Blog>
+}
+
+export function BlogPageClient({ allBlogs }: BlogPageClientProps) {
+  const search = useSearchBlog(allBlogs)
+
+  return (
+    <>
+      <Hero
+        title='Blog'
+        description='Thoughts on Artificial Intelligence, Computer Graphics, and Software Engineering.'
+      />
+      <Searchbar placeholder='Search blogs...' value={search.query} onChange={search.handleChange} className='mb-0' />
+
+      <div className='flex flex-col gap-8 pb-24'>
+        {search.query.length > 0 ? (
+          <>
+            {search.filteredBlog.length > 0 ? <BlogList displayViews posts={search.filteredBlog} /> : <EmptyResult />}
+          </>
+        ) : (
+          <BlogList displayViews posts={allBlogs} />
+        )}
+      </div>
+    </>
+  )
+}

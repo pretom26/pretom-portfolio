@@ -1,0 +1,137 @@
+import { ResearchAreas, ResearchNews, ResearchOverview, ResearchSections } from '@/components/content/research'
+import { StarfieldBackground } from '@/components/site/StarfieldBackground'
+import { AppLayoutPage } from '@/components/site/templates/AppLayoutPage'
+
+import { getContentHeaders } from '@/services/content'
+import { getViewsBatch } from '@/services/pageviews'
+
+import { SITE_NAME, SITE_URL } from '@/libs/constants/site'
+import { generateOgImage } from '@/libs/metapage'
+import { getNewestResearch } from '@/libs/sorters'
+
+import type { Research } from 'me'
+import type { Metadata } from 'next'
+
+const RESEARCH_URL = `${SITE_URL}/research`
+const RESEARCH_OG_IMAGE = generateOgImage({
+  title: 'Research',
+  subTitle: 'AI, 3D graphics, and reliable recommendation',
+  type: 'research'
+})
+const RESEARCH_OG_ALT = `Research - ${SITE_NAME} - Projects in AI, 3D graphics, and recommendation`
+
+export const metadata: Metadata = {
+  title: `Research - ${SITE_NAME}`,
+  description: 'Research projects in AI, 3D computer graphics, and recommender systems by Ahnaf An Nafee.',
+  keywords: [
+    'Ahnaf An Nafee research',
+    'ahnafnafee research',
+    'PhD research AI 3D Graphics',
+    'computer graphics research',
+    'machine learning for graphics',
+    'mesh simplification research',
+    'AI 3D content generation',
+    'recommender systems evaluation',
+    'GMU research',
+    'DCXR Lab',
+    'academic publications',
+    'research projects'
+  ],
+  alternates: {
+    canonical: RESEARCH_URL
+  },
+  openGraph: {
+    title: `Research - ${SITE_NAME}`,
+    description: 'Research projects in AI, 3D computer graphics, and recommender systems.',
+    url: RESEARCH_URL,
+    siteName: SITE_NAME,
+    images: [{ url: RESEARCH_OG_IMAGE, width: 1200, height: 630, alt: RESEARCH_OG_ALT, type: 'image/png' }],
+    locale: 'en_US',
+    type: 'website'
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: `Research - ${SITE_NAME}`,
+    description: 'Research projects in AI, 3D computer graphics, and recommender systems.',
+    images: [{ url: RESEARCH_OG_IMAGE, alt: RESEARCH_OG_ALT }]
+  }
+}
+
+async function getResearchData(): Promise<Research[]> {
+  try {
+    const response = await getContentHeaders<Research>('/research')
+    const headers = response.map((r) => r.header).sort(getNewestResearch)
+    if (headers.length === 0) return headers
+
+    // Direct service call (no HTTP round-trip) — works in dev without
+    // depending on SITE_URL pointing at the running server.
+    const views = await getViewsBatch(headers.map((h) => h.slug))
+    return headers.map((h) => ({ ...h, views: views[h.slug] ?? 0 }))
+  } catch (error) {
+    console.warn('Failed to load research:', error)
+    return []
+  }
+}
+
+export default async function ResearchPage() {
+  const allResearch = await getResearchData()
+
+  const webpageId = `${RESEARCH_URL}#webpage`
+  const breadcrumbId = `${RESEARCH_URL}#breadcrumb`
+
+  const graphJsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'CollectionPage',
+        '@id': webpageId,
+        url: RESEARCH_URL,
+        name: `Research - ${SITE_NAME}`,
+        description: 'Research projects in AI, 3D computer graphics, and recommender systems.',
+        inLanguage: 'en-US',
+        isPartOf: { '@type': 'WebSite', url: SITE_URL },
+        primaryImageOfPage: {
+          '@type': 'ImageObject',
+          url: RESEARCH_OG_IMAGE,
+          width: 1200,
+          height: 630,
+          caption: RESEARCH_OG_ALT
+        },
+        breadcrumb: { '@id': breadcrumbId },
+        mainEntity: {
+          '@type': 'ItemList',
+          numberOfItems: allResearch.length,
+          itemListElement: allResearch.slice(0, 20).map((r, i) => ({
+            '@type': 'ListItem',
+            position: i + 1,
+            url: `${SITE_URL}/research/${r.slug}`,
+            name: r.title
+          }))
+        }
+      },
+      {
+        '@type': 'BreadcrumbList',
+        '@id': breadcrumbId,
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
+          { '@type': 'ListItem', position: 2, name: 'Research', item: RESEARCH_URL }
+        ]
+      }
+    ]
+  }
+
+  return (
+    <>
+      <StarfieldBackground />
+      <AppLayoutPage className='pt-6 md:pt-10'>
+        <script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify(graphJsonLd) }} />
+        {/* h1 kept for accessibility / SEO; visual title removed per design — sections below carry the page */}
+        <h1 className='sr-only'>Research</h1>
+        <ResearchOverview />
+        <ResearchNews />
+        <ResearchAreas />
+        <ResearchSections posts={allResearch} />
+      </AppLayoutPage>
+    </>
+  )
+}

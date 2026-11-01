@@ -1,0 +1,24 @@
+import { UnstyledLink, UnstyledLinkProps } from '@/components/site/links'
+
+import { twclsx } from '@/libs/twclsx'
+
+export const MDXLink: React.FunctionComponent<UnstyledLinkProps> = ({ href, children, className, ...props }) => {
+  return (
+    <UnstyledLink
+      className={twclsx(
+        'relative items-center',
+        'border-b border-dashed no-underline',
+        'border-theme-900 dark:border-theme-200',
+        'text-indigo-600 dark:text-indigo-300 font-semibold',
+        'after:absolute after:-bottom-0.5 after:left-0',
+        'after:h-0.5 after:w-0 after:transition-all after:duration-300 hover:after:w-full',
+        'after:from-indigo-500 after:to-violet-500 after:bg-gradient-to-r',
+        className
+      )}
+      href={href}
+      {...props}
+    >
+      {children}
+    </UnstyledLink>
+  )
+}

@@ -1,0 +1,42 @@
+import { WrappedImage } from '@/components/site/images'
+import { UnderlineLink } from '@/components/site/links'
+
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: '404 - Page Not Found',
+  description: 'The page you are looking for cannot be found.',
+  robots: {
+    index: false,
+    follow: true,
+    nocache: true,
+    googleBot: {
+      index: false,
+      follow: true,
+      noimageindex: true
+    }
+  }
+}
+
+/**
+ * Used to display UI of 404, if the
+ * Visitor of the web visit unavailable page
+ */
+export default function NotFound() {
+  return (
+    <>
+      <main className='layout'>
+        <div className='flex min-h-screen flex-col items-center justify-center gap-4'>
+          <WrappedImage priority src='/static/404.svg' alt='illustration' quality={60} width={225} height={225} />
+
+          <section className='text-center'>
+            <h1 className='text-center'>404 - Not Found</h1>
+            <p className='my-2 md:my-4'>The page you are looking for are not found</p>
+
+            <UnderlineLink href='/'>Back to home</UnderlineLink>
+          </section>
+        </div>
+      </main>
+    </>
+  )
+}

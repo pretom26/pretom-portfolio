@@ -1,0 +1,25 @@
+import { SnippetItem } from './SnippetItem'
+
+import { Snippet } from 'me'
+import { useId } from 'react'
+
+type Props = {
+  snippets: Snippet[]
+  title: string
+  description: string
+}
+
+export const SnippetList: React.FunctionComponent<Props> = (props) => {
+  const id = useId()
+  return (
+    <section className='py-16'>
+      <h2 className='mb-1 md:mb-3'>{props.title}</h2>
+      <p className='mb-6 md:mb-8'>{props.description}</p>
+
+      <div className='flex w-full flex-col'>
+        {props.snippets.length > 0 &&
+          props.snippets.map((snippet) => <SnippetItem key={id + snippet.slug} {...snippet} />)}
+      </div>
+    </section>
+  )
+}

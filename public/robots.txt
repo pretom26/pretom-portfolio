@@ -1,0 +1,69 @@
+# *
+User-agent: *
+Allow: /
+Allow: /api/og
+Disallow: /api/
+Disallow: /_next/
+Disallow: /static/
+
+# GPTBot
+User-agent: GPTBot
+Allow: /
+
+# ChatGPT-User
+User-agent: ChatGPT-User
+Allow: /
+
+# OAI-SearchBot
+User-agent: OAI-SearchBot
+Allow: /
+
+# Claude-Web
+User-agent: Claude-Web
+Allow: /
+
+# ClaudeBot
+User-agent: ClaudeBot
+Allow: /
+
+# anthropic-ai
+User-agent: anthropic-ai
+Allow: /
+
+# Google-Extended
+User-agent: Google-Extended
+Allow: /
+
+# PerplexityBot
+User-agent: PerplexityBot
+Allow: /
+
+# Perplexity-User
+User-agent: Perplexity-User
+Allow: /
+
+# Applebot-Extended
+User-agent: Applebot-Extended
+Allow: /
+
+# Bytespider
+User-agent: Bytespider
+Allow: /
+
+# CCBot
+User-agent: CCBot
+Allow: /
+
+# cohere-ai
+User-agent: cohere-ai
+Allow: /
+
+# meta-externalagent
+User-agent: meta-externalagent
+Allow: /
+
+# Host
+Host: https://www.ahnafnafee.dev
+
+# Sitemaps
+Sitemap: https://www.ahnafnafee.dev/sitemap.xml

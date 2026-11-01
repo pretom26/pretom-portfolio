@@ -1,0 +1,250 @@
+declare module 'me' {
+  /** Type used for blog post or metadata for blog */
+  export type Blog = {
+    title: string
+    slug: string
+    summary: string
+    featured: boolean
+    author_name: string
+    github_username: string
+    published: string
+    updated?: string
+    topics: Array<string>
+    keywords: Array<string>
+    related: Array<string>
+    views?: number
+    est_read?: string
+    displayViews?: boolean
+    thumbnail?: string
+  }
+
+  type CategoryTypes = 'software' | 'game'
+
+  /** Type used for portfolio or meta data for portfolio */
+  export type Portfolio = {
+    title: string
+    date: string
+    updated?: string
+    featured: boolean
+    summary: string
+    slug: string
+    stack: Array<string>
+    image: string
+    /** Optional hero/teaser image shown on the detail page. Falls back to `image`.
+     * Kept separate so an animated teaser (e.g. a .gif) never becomes the og:image. */
+    teaser?: string
+    link: {
+      github?: string
+      live?: string
+      appStore?: string
+      playStore?: string
+    }
+    category?: CategoryTypes
+    /** Populated server-side from /api/pageviews/batch. Optional — falls back to 0. */
+    views?: number
+  }
+  /** Author of a research entry. `affiliations` indices are 1-based and reference the entry's top-level `affiliations` array. */
+  export type Author = {
+    name: string
+    url?: string
+    affiliations?: Array<number>
+    /** Renders a `*` superscript next to the name + a "*Corresponding author" caption.
+     * Suppressed on single-author papers (the marker has nothing to disambiguate). */
+    corresponding?: boolean
+    /** Marks shared first-authorship. Renders a `†` superscript on every author with the
+     * flag set + a "†Equal contribution" caption. Requires at least 2 authors flagged
+     * (the concept of "equal" is meaningless with one). */
+    equalContribution?: boolean
+    /** Marks the senior / PI author. Renders a `‡` superscript + a "‡Principal
+     * investigator" caption. Suppressed on single-author papers. */
+    principalInvestigator?: boolean
+    email?: string
+    orcid?: string
+  }
+
+  export type Affiliation = {
+    name: string
+    location?: string
+    url?: string
+  }
+
+  export type Venue = {
+    name?: string
+    short?: string
+    year?: number
+    status?: 'preprint' | 'under-review' | 'accepted' | 'published' | 'workshop' | 'tech-report'
+    url?: string
+  }
+
+  export type ResearchLinks = {
+    paper?: string
+    code?: string
+    video?: string
+    slides?: string
+    dataset?: string
+    arxiv?: string
+    researchGate?: string
+    supplementary?: string
+    demo?: string
+    project?: string
+  }
+
+  export type ResearchIdentifiers = {
+    doi?: string
+    arxivId?: string
+    researchGateId?: string
+  }
+
+  /** Type used for a research entry — academic project pages with abstract + structured authors. */
+  export type Research = {
+    title: string
+    slug: string
+    summary: string
+    abstract: string
+    authors: Array<Author>
+    affiliations?: Array<Affiliation>
+    venue?: Venue
+    published: string
+    updated?: string
+    featured?: boolean
+    topics: Array<string>
+    keywords: Array<string>
+    thumbnail?: string
+    teaser?: string
+    teaserCaption?: string
+    ogImage?: string
+    links?: ResearchLinks
+    identifiers?: ResearchIdentifiers
+    bibtex?: string
+    category?: 'graphics' | 'ai' | 'hci' | 'systems' | 'theory'
+    /** Listing-page section. Drives grouping under section headers. */
+    section?: 'top-tier' | 'conferences' | 'journals' | 'workshops' | 'others'
+    /** Renders a "NEW" badge inline with the title on listing cards. */
+    new?: boolean
+    /** Renders a "Coming soon!" placeholder in place of the listing thumbnail
+     * when no thumbnail/teaser exists yet (e.g. conditionally accepted papers). */
+    comingSoon?: boolean
+    related?: Array<string>
+    /** Populated server-side from /api/pageviews/batch. Optional — falls back to 0. */
+    views?: number
+  }
+
+  /** Type used for snippet or meta data for snippet */
+  export type Snippet = {
+    title: string
+    summary: string
+    topic: string
+    created_at: string
+    slug: string
+    author: string
+    github_username: string
+  }
+  /** Page-type label that the OG card uses to pick its accent palette and chip
+   * label. Defaults to `'page'` (muted slate fallback) when callers don't pass
+   * an explicit type. */
+  export type OgPageType =
+    | 'home'
+    | 'blog'
+    | 'blog-post'
+    | 'portfolio'
+    | 'portfolio-post'
+    | 'research'
+    | 'research-post'
+    | 'resume'
+    | 'page'
+
+  /** Payload for `generateOgImage`. The OG route consumes the same query
+   * parameters and renders the corresponding page-typed card. Topics are
+   * comma-serialized and capped at 5 (24 chars each) to stay under URL-length
+   * limits. */
+  export type genOgImagePayload = {
+    title: string
+    subTitle?: string
+    theme?: 'light' | 'dark'
+    /** Drives accent color + chip label. Defaults to `'page'` if absent. */
+    type?: OgPageType
+    /** Topic / tag chips shown under the title. Capped at 5 entries. */
+    topics?: ReadonlyArray<string>
+    /** Free-form category label (research category, portfolio category). */
+    category?: string
+    /** Research listing section (`top-tier` / `conferences` / etc.). */
+    section?: string
+    /** Pre-formatted venue line for research posts (e.g. `'GMU CS700 · 2025'`). */
+    venue?: string
+  }
+
+  // a section for resume - start
+  /** An education type used for list of education data later on displayed on resume page */
+  export type Education = {
+    school: string
+    period: { start: string; end: string }
+    paragraphs: string[]
+    list?: {
+      title: string
+      listItem: string[]
+    }
+  }
+
+  /** a type used for list of experiences data later on displayed on resume page */
+  export type Experience = {
+    companyName: string
+    role: string
+    period: {
+      start: string
+      end: string
+    }
+    lists: string[]
+  }
+
+  /** A single course/term that the author has TA'd or GTA'd. One record per (course, term) — the renderer groups by (institution, course) and lists terms inline. */
+  export type Teaching = {
+    institution: string
+    institutionUrl?: string
+    role: 'GTA' | 'TA'
+    courseCode: string
+    courseTitle: string
+    /** Display label, e.g. 'Fall 2025' or 'Winter 2021–22'. */
+    term: string
+    /** YYYYMM key (start month of the term). Used for descending sort. */
+    termSort: number
+    /** Optional one-line course-content blurb. */
+    description?: string
+  }
+  // a section for resume - end
+
+  /** a type used for social like facebook, provide text to displayed to view and an for the URL*/
+  export type Social = {
+    title: string
+    href: string
+  }
+
+  /** a type used for list of certificate later on certificate page */
+  export type Certificate = { title: string; src: string }
+
+  /** a type for pageView from umami */
+  export type PageView = {
+    bounces: { value: number; change: number }
+    pageviews: { value: number; change: number }
+    totaltime: { value: number; change: number }
+    unique: { value: number; change: number }
+  }
+
+  export type Timeline = {
+    title: string
+    description: string
+    place: string
+    start_date: Date
+    end_date: Date | null
+    type: 'edu' | 'work'
+  }
+
+  export type PageViewResponse = {
+    message: string
+    view: number | null
+  }
+
+  export type Category = {
+    label?: CategoryTypes
+    className?: string | undefined
+  }
+}
