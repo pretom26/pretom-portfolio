@@ -68,7 +68,7 @@ function readTopics(searchParams: URLSearchParams): string[] {
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url)
-    const title = readParam(searchParams, 'title', 140) ?? 'Ahnaf An Nafee'
+    const title = readParam(searchParams, 'title', 140) ?? 'Pretom Areefin Pranto'
     const subtitle = readParam(searchParams, 'subtitle', 220)
     const category = readParam(searchParams, 'category', 40)
     const section = readParam(searchParams, 'section', 40)

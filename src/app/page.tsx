@@ -1,413 +1,415 @@
-import { ContentImage } from '@/components/content'
-import { BlogItem } from '@/components/content/blog/BlogItem'
-import { NewsTimeline } from '@/components/content/news'
-import { PortfolioList } from '@/components/content/portfolio/PortfolioList'
-import { ResearchItem } from '@/components/content/research/ResearchItem'
-import { TeachingSection } from '@/components/content/teaching'
+import Image from 'next/image'
 import { SocialHome } from '@/components/site/common'
 import { StarfieldBackground } from '@/components/site/StarfieldBackground'
-
-import { getContents } from '@/services'
-import { getContentHeaders } from '@/services/content'
-import { getViewsBatch } from '@/services/pageviews'
-
-import { SITE_AUTHOR, SITE_NAME, SITE_URL } from '@/libs/constants/site'
-import { generateOgImage } from '@/libs/metapage'
 import { getPersonNode } from '@/libs/seo/personSchema'
-import { getNewestBlog, getNewestPortfolio, getNewestResearch } from '@/libs/sorters'
+import { PROFILE_IMAGE, SITE_AUTHOR, SITE_NAME, SITE_URL } from '@/libs/constants/site'
 
-import { NEWS } from '@/data/news'
-
-import type { Blog, Portfolio, Research } from 'me'
 import type { Metadata } from 'next'
-import Link from 'next/link'
-import readingTime from 'reading-time'
 
-// HomeOgCard renders its own multi-line `> role · …` printout in place of a
-// flat subtitle, so we no longer pass subTitle here. Topics drive the chip
-// row under the printout and surface research areas to OG previews.
-const HOME_OG_IMAGE = generateOgImage({
-  title: 'Ahnaf An Nafee',
-  type: 'home',
-  topics: ['Generative AI', '3D Graphics', 'Immersive XR']
-})
-const HOME_OG_ALT = `${SITE_NAME} - PhD student in AI and 3D graphics at George Mason University | DCXR Lab`
-const HOME_TITLE = `${SITE_NAME} - PhD Student in AI & 3D Graphics | DCXR Lab @ GMU`
+/**
+ * Personalized homepage for Pretom Areefin Pranto.
+ *
+ * This intentionally does not read the template owner's sample blog posts,
+ * research entries, news, teaching records, or portfolio data. Add your own
+ * MDX content before reconnecting those original dynamic components.
+ */
+
+const HOME_TITLE = `${SITE_NAME} | Machine Learning, AI Research & Software Engineering`
 const HOME_DESCRIPTION =
-  'Computer Science PhD student at George Mason University, working in the DCXR Lab under Dr. Craig Yu. Research interests include HCI, AI, immersive systems, and 3D graphics. Seeking a Summer 2027 research internship.'
-
-const structuredData = {
-  '@context': 'https://schema.org',
-  '@type': 'ProfilePage',
-  '@id': `${SITE_URL}/#webpage`,
-  url: SITE_URL,
-  name: HOME_TITLE,
-  inLanguage: 'en-US',
-  dateCreated: '2022-12-08T00:00:00-05:00',
-  dateModified: new Date().toISOString(),
-  isPartOf: { '@type': 'WebSite', url: SITE_URL },
-  primaryImageOfPage: {
-    '@type': 'ImageObject',
-    url: HOME_OG_IMAGE,
-    width: 1200,
-    height: 630,
-    caption: HOME_OG_ALT
-  },
-  mainEntity: getPersonNode()
-}
+  'Pretom Areefin Pranto is a Computer Science undergraduate at BRAC University, working on healthcare AI, multimodal machine learning, and full-stack software development.'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: {
-    default: HOME_TITLE,
-    template: `%s | ${SITE_NAME}`
-  },
+  title: HOME_TITLE,
   description: HOME_DESCRIPTION,
   applicationName: `${SITE_NAME} Portfolio`,
   authors: [{ name: SITE_NAME, url: SITE_URL }],
   creator: SITE_NAME,
-  publisher: SITE_NAME,
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false
-  },
-  alternates: {
-    canonical: SITE_URL,
-    languages: {
-      'en-US': SITE_URL,
-      'x-default': SITE_URL
-    },
-    types: {
-      'application/rss+xml': [
-        { url: `${SITE_URL}/rss.xml`, title: `${SITE_NAME} — Blog (RSS)` },
-        { url: `${SITE_URL}/rss-full.xml`, title: `${SITE_NAME} — Blog (Full RSS)` }
-      ]
-    }
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1
-    }
-  },
-  verification: {
-    google: '95f162fe4bdc4ae6a3d9a4acad910d6d',
-    yandex: '4085f4892e0b1a1e'
-  },
-  other: {
-    'application/ld+json': JSON.stringify(structuredData)
-  },
-  keywords: [
-    'Ahnaf An Nafee',
-    'ahnafnafee',
-    'PhD AI 3D Graphics',
-    'AI 3D Graphics Research',
-    'Machine Learning Graphics',
-    'Computer Science PhD student',
-    'George Mason University',
-    'DCXR Lab',
-    'Dr. Craig Yu',
-    'AI-driven 3D content generation',
-    'Machine learning for graphics pipelines',
-    'UV mapping automation',
-    'NPR techniques',
-    'AI researcher',
-    'Computer graphics researcher',
-    '3D Computer Graphics',
-    'Generative AI',
-    'Deep Learning',
-    'Computer Vision',
-    'Neural Networks',
-    'PyTorch',
-    'TensorFlow',
-    'Rendering Pipelines',
-    'Real-time Rendering',
-    'Parameterized Shaders',
-    'GLSL',
-    'WebGL',
-    'HCI research',
-    'user experience research',
-    'human-centered AI',
-    'immersive systems',
-    'Extended Reality',
-    'XR Research',
-    'Game Development',
-    'Unity 3D',
-    'Unreal Engine',
-    'Game Engine Development',
-    'Technical Artist',
-    'Graphics Programming',
-    'Shader Programming',
-    'AI Graphics Intersection',
-    'Creative AI',
-    'Procedural Generation',
-    'Academic Research',
-    'PhD Researcher',
-    'Research Portfolio',
-    'Ex-CTO',
-    'Tech Startup',
-    'Software Engineering',
-    'Python Developer',
-    'C++ Developer',
-    'Full Stack Developer',
-    'recommendation evaluation',
-    'ML systems',
-    'Summer 2027 research internship'
-  ],
+  alternates: { canonical: SITE_URL },
   openGraph: {
     title: HOME_TITLE,
     description: HOME_DESCRIPTION,
     url: SITE_URL,
     siteName: SITE_NAME,
-    images: [{ url: HOME_OG_IMAGE, width: 1200, height: 630, alt: HOME_OG_ALT, type: 'image/png' }],
-    locale: 'en_US',
     type: 'profile',
-    firstName: 'Ahnaf',
-    lastName: 'Nafee',
+    firstName: 'Pretom',
+    lastName: 'Areefin Pranto',
     username: SITE_AUTHOR.githubUsername,
-    emails: [SITE_AUTHOR.email]
   },
   twitter: {
-    card: 'summary_large_image',
+    card: 'summary',
     title: HOME_TITLE,
     description: HOME_DESCRIPTION,
-    images: [{ url: HOME_OG_IMAGE, alt: HOME_OG_ALT }]
-  }
+  },
+  keywords: [
+    'Pretom Areefin Pranto',
+    'Machine Learning',
+    'Healthcare AI',
+    'Multimodal Learning',
+    'Deep Learning',
+    'Software Engineering',
+    'BRAC University',
+    'React',
+    'Next.js',
+    'PyTorch',
+    'MONAI',
+    'XGBoost',
+  ],
+}
+const research = [
+  {
+    category: 'Undergraduate Thesis · Completed (2026)',
+    title: 'NeuroVentura',
+    subtitle: 'A Modern Approach to Predict Alzheimer’s Disease Risk and Progression Through Multimodal Machine Learning Models',
+    description:
+      'Completed undergraduate research developing a late-fusion framework that combines a frozen MONAI 3D DenseNet-121 for MRI, XGBoost using MMSE, age, and gender, and a residual MLP on a matched cohort.',
+    tags: ['Medical Imaging', 'MONAI', 'PyTorch', 'XGBoost', 'Multimodal AI'],
+  },
+  {
+    category: 'Conference project · 2025',
+    title: 'LungCare',
+    subtitle: 'Multiclass lung cancer image classification',
+    description:
+      'A deep-learning pipeline for classifying lung cancer subtypes from histopathology images, including preprocessing and prediction visualization.',
+    tags: ['Computer Vision', 'Deep Learning', 'Histopathology'],
+  },
+  {
+    category: 'Academic ML Project',
+    title: 'Diabetic Retinopathy Severity Classification',
+    subtitle: 'Interpretable retinal image classification',
+    description:
+      'A four-class diabetic retinopathy classifier using ResNet50 transfer learning, class-weighted training, and Grad-CAM visualizations.',
+    tags: ['ResNet50', 'Transfer Learning', 'Grad-CAM'],
+  },
+]
+
+const projects = [
+  {
+    category: 'Full-Stack Web Application',
+    title: 'Abar Nosto!',
+    description:
+      'Community issue reporting with an activity feed, reputation features, offline drafts, and administrative tools. Built using the MERN stack and deployed on Vercel.',
+    tags: ['MongoDB', 'Express', 'React', 'Node.js'],
+  },
+  {
+    category: 'Artificial Intelligence',
+    title: 'PretBuddy',
+    description:
+      'A real-time Python AI voice assistant integrating speech processing and AI-powered responses with AssemblyAI, Groq, and ElevenLabs.',
+    tags: ['Python', 'Voice AI', 'API Integration'],
+  },
+  {
+    category: 'Software Engineering',
+    title: 'BRACU Student Hub',
+    description:
+      'A MERN-based platform for academic resources, exam deadlines, calendars, faculty reviews, and administrator-managed content.',
+    tags: ['React', 'Node.js', 'MongoDB'],
+  },
+  {
+    category: 'Developer Tooling',
+    title: 'Weather CLI',
+    description:
+      'A typed Python command-line application with TTL caching, terminal output, automated tests, and GitHub Actions CI. Reported test coverage: 94%.',
+    tags: ['Python', 'Pytest', 'GitHub Actions'],
+  },
+]
+
+const skills = [
+  {
+    label: 'Machine Learning & Data',
+    items: 'PyTorch, MONAI, scikit-learn, XGBoost, Pandas, NumPy, computer vision',
+  },
+  {
+    label: 'Software Development',
+    items: 'Python, JavaScript, React, Node.js, Express, MongoDB, SQL, REST APIs',
+  },
+  {
+    label: 'Engineering Tools',
+    items: 'Git, GitHub, VS Code, Google Colab, LaTeX, automated testing',
+  },
+]
+
+function Tag({ children }: { children: string }) {
+  return (
+    <span className='rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-xs font-medium text-gray-600 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300'>
+      {children}
+    </span>
+  )
 }
 
-async function getLatestBlog() {
-  try {
-    const blogs = await getContents<Blog>('/blog')
-    const sorted = blogs.sort((a, b) => getNewestBlog(a.header, b.header))
-    const latest = sorted[0]
-    if (!latest) return null
-
-    return {
-      ...latest.header,
-      est_read: readingTime(latest.content).text
-    } as Blog
-  } catch (error) {
-    console.warn('Failed to load blog:', error)
-    return null
-  }
+function SectionHeading({
+  eyebrow,
+  title,
+  description,
+}: {
+  eyebrow: string
+  title: string
+  description: string
+}) {
+  return (
+    <div className='mb-7'>
+      <p className='mb-2 text-xs font-semibold tracking-[0.2em] text-purple-600 uppercase dark:text-purple-300'>
+        {eyebrow}
+      </p>
+      <h2 className='text-2xl font-bold tracking-tight text-gray-950 md:text-3xl dark:text-white'>
+        {title}
+      </h2>
+      <p className='mt-2 max-w-2xl text-sm leading-7 text-gray-600 md:text-base dark:text-gray-400'>
+        {description}
+      </p>
+    </div>
+  )
 }
 
-async function getPortfolios() {
-  try {
-    const portfolios = await getContents<Portfolio>('/portfolio')
-    return portfolios
-      .map((p) => p.header)
-      .filter((f) => f.featured)
-      .sort(getNewestPortfolio)
-  } catch (error) {
-    console.warn('Failed to load portfolios:', error)
-    return []
-  }
-}
 
-async function getFeaturedResearch(): Promise<Research[]> {
-  try {
-    const entries = await getContentHeaders<Research>('/research')
-    return entries
-      .map((r) => r.header)
-      .filter((r) => r.featured)
-      .sort(getNewestResearch)
-  } catch (error) {
-    console.warn('Failed to load research:', error)
-    return []
-  }
-}
-
-export default async function HomePage() {
-  const [portfolios, latestBlog, featuredResearch] = await Promise.all([
-    getPortfolios(),
-    getLatestBlog(),
-    getFeaturedResearch()
-  ])
-
-  // One batch DB read for every slug rendered on the home page. Direct
-  // service call (no HTTP round-trip) so it works in dev without a public
-  // SITE_URL and skips the JSON serialization overhead.
-  const homeSlugs = [
-    ...(latestBlog ? [latestBlog.slug] : []),
-    ...featuredResearch.slice(0, 2).map((r) => r.slug),
-    ...portfolios.map((p) => p.slug)
-  ]
-  const homeViews = await getViewsBatch(homeSlugs)
-  const latestBlogWithViews = latestBlog ? { ...latestBlog, views: homeViews[latestBlog.slug] ?? 0 } : null
-  const featuredResearchWithViews = featuredResearch.map((r) => ({ ...r, views: homeViews[r.slug] ?? 0 }))
-  const portfoliosWithViews = portfolios.map((p) => ({ ...p, views: homeViews[p.slug] ?? 0 }))
-
+export default function HomePage() {
   return (
     <>
       <StarfieldBackground />
-      <main className='layout' itemScope itemType='https://schema.org/ProfilePage'>
-        <section className='flex flex-col' itemScope itemType='https://schema.org/Person' itemProp='mainEntity'>
-          <div className='mt-3 flex flex-col-reverse items-start sm:flex-row md:mt-6'>
-            <div className='flex flex-1 flex-col sm:pr-8'>
-              <div className='mb-3 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[11px] font-semibold tracking-[0.22em] text-gray-500 uppercase md:text-xs dark:text-gray-400'>
-                <span aria-hidden='true' className='h-1.5 w-1.5 rounded-full bg-purple-500' />
-                <span>PhD Student</span>
-                <span aria-hidden='true' className='text-gray-300 dark:text-gray-600'>
-                  ·
-                </span>
-                <span>AI &amp; 3D Graphics</span>
-                <span aria-hidden='true' className='h-1.5 w-1.5 rounded-full bg-purple-500' />
+
+      {/* Structured data for SEO */}
+      <script
+        type='application/ld+json'
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(getPersonNode()).replace(
+            /</g,
+            '\\u003c'
+          )
+        }}
+      />
+
+      <main
+        className='layout relative'
+        itemScope
+        itemType='https://schema.org/ProfilePage'
+      >
+        {/* Personal introduction */}
+        <section
+          className='flex flex-col border-b border-gray-200 pt-5 pb-12 md:pt-12 md:pb-16 dark:border-gray-800'
+          itemScope
+          itemType='https://schema.org/Person'
+          itemProp='mainEntity'
+        >
+          <div className='flex flex-col-reverse items-start gap-8 sm:flex-row sm:items-center sm:justify-between'>
+            <div className='min-w-0 flex-1'>
+              <div className='mb-4 flex flex-wrap items-center gap-2 text-xs font-semibold tracking-[0.12em] text-gray-600 uppercase dark:text-gray-300'>
+                <span aria-hidden='true' className='h-2 w-2 rounded-full bg-purple-500' />
+                <span>Computer Science</span>
+                <span aria-hidden='true'>·</span>
+                <span>Machine Learning</span>
+                <span aria-hidden='true'>·</span>
+                <span>Software Engineering</span>
               </div>
+
               <h1
-                className='name-aberration from-primary-600 dark:from-primary-300 mb-3 bg-gradient-to-br via-purple-600 to-pink-500 bg-clip-text text-5xl font-extrabold tracking-tight text-transparent md:text-7xl dark:via-purple-300 dark:to-pink-300'
+                className='name-aberration from-primary-600 dark:from-primary-300 mb-4 bg-gradient-to-br via-purple-600 to-pink-500 bg-clip-text text-4xl leading-tight font-extrabold tracking-tight text-transparent break-words sm:text-5xl md:text-6xl dark:via-purple-300 dark:to-pink-300'
                 itemProp='name'
-                data-text={'Ahnaf An Nafee'}
+                data-text={SITE_NAME}
               >
-                Ahnaf <span className='whitespace-nowrap'>An Nafee</span>
+                {SITE_NAME}
               </h1>
-              <h2 className='mb-4 text-base text-gray-700 md:text-lg dark:text-gray-200' itemProp='jobTitle'>
-                PhD Student @{' '}
-                <span
-                  className='font-semibold'
-                  itemProp='affiliation'
-                  itemScope
-                  itemType='https://schema.org/Organization'
-                >
-                  <span itemProp='name'>GMU DCXR Lab</span>
-                </span>{' '}
-                · Ex-CTO
+
+              <h2 className='text-lg font-medium text-gray-700 md:text-xl dark:text-gray-200' itemProp='jobTitle'>
+                Computer Science Undergraduate at{' '}
+                <span className='font-bold'>BRAC University</span>
               </h2>
+
+              <p className='mt-5 max-w-2xl text-base leading-8 text-gray-700 dark:text-gray-300'>
+                I build intelligent systems and practical software across multimodal
+                machine learning, healthcare AI, computer vision, and full-stack
+                development. I completed my undergraduate thesis, <strong>NeuroVentura</strong>,
+                on Alzheimer&apos;s disease risk and progression prediction using
+                multimodal machine learning models.
+              </p>
+
+              <p className='mt-3 max-w-2xl text-base leading-8 text-gray-700 dark:text-gray-300'>
+                During my Machine Learning Engineering internship at FlyRank AI, I
+                developed a search discoverability capstone and improved evaluation
+                reliability by adopting client-grouped train/test splits to reduce leakage.
+              </p>
+
+              <div className='mt-7 flex flex-wrap gap-3'>
+                <a
+                  href='#research'
+                  className='rounded-lg bg-purple-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-purple-700'
+                >
+                  Explore research
+                </a>
+                <a
+                  href='#projects'
+                  className='rounded-lg border border-gray-300 px-5 py-3 text-sm font-semibold text-gray-900 transition hover:border-purple-400 hover:text-purple-700 dark:border-gray-700 dark:text-white dark:hover:text-purple-300'
+                >
+                  View projects
+                </a>
+                <a
+                  href='https://github.com/pretom26'
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='rounded-lg border border-gray-300 px-5 py-3 text-sm font-semibold text-gray-900 transition hover:border-purple-400 dark:border-gray-700 dark:text-white'
+                >
+                  GitHub ↗
+                </a>
+              </div>
             </div>
-            <div className='mb-8 flex-shrink-0 sm:mb-0 sm:ml-8'>
-              <ContentImage
-                src='https://ik.imagekit.io/8ieg70pvks/profile?tr=w-400,h-400'
-                alt='Ahnaf An Nafee, PhD student in AI and 3D graphics at George Mason University'
-                width={176}
-                height={176}
-                className='border-theme-100 dark:border-theme-800 h-[100px] w-[100px] cursor-pointer rounded-full border-4 object-cover sm:h-[176px] sm:w-[176px]'
-                title="Ahnaf An Nafee's Profile Picture"
-                itemProp='image'
-                quality={100}
-                sizes='(max-width: 640px) 100px, 176px'
+
+            {/* Public image: public/pretom-profile.jpg (PROFILE_IMAGE in site.ts). */}
+            <div className='relative shrink-0'>
+              <Image
+                src={PROFILE_IMAGE}
+                alt='Portrait of Pretom Areefin Pranto'
+                width={800}
+                height={800}
+                sizes='(max-width: 640px) 112px, 160px'
                 priority
-                placeholder='blur'
-                blurDataURL='https://ik.imagekit.io/8ieg70pvks/profile?tr=bl-6'
+                className='h-28 w-28 rounded-full border-4 border-purple-200 object-cover shadow-xl shadow-purple-500/20 transition-transform duration-300 hover:scale-105 sm:h-40 sm:w-40 dark:border-purple-900'
               />
             </div>
           </div>
 
-          <p className='mt-2 max-w-2xl text-base leading-7 text-gray-700 md:text-lg md:leading-8 dark:text-gray-300'>
-            I work on HCI, AI, and 3D computer graphics in the{' '}
-            <a
-              href='https://craigyuyu.github.io/home/group.html'
-              target='_blank'
-              rel='noopener noreferrer'
-              className='text-link font-semibold'
-            >
-              DCXR Lab
-            </a>{' '}
-            at George Mason University, advised by Dr. Craig Yu. I design experiments, pilot-test interactive systems,
-            and build tools for research. Before graduate school, I led engineering as CTO of a tech startup.
-          </p>
-
-          <aside
-            aria-labelledby='summer-2027-heading'
-            className='relative mt-6 max-w-2xl overflow-hidden rounded-xl border border-blue-200 bg-blue-50/80 px-5 py-5 dark:border-purple-500/40 dark:bg-purple-950/25'
-          >
-            <div
-              aria-hidden='true'
-              className='absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500'
-            />
-            <p className='font-mono text-xs font-semibold tracking-widest text-purple-700 uppercase dark:text-purple-300'>
-              Summer 2027
-            </p>
-            <h3 id='summer-2027-heading' className='mt-2 text-xl font-bold text-gray-900 dark:text-white'>
-              Seeking a research internship
-            </h3>
-            <p className='mt-2 text-sm leading-6 text-gray-700 md:text-base dark:text-gray-200'>
-              I&apos;m interested in HCI, UX research, 3D graphics, and human-centered AI roles where I can design
-              studies, build interactive systems, and evaluate what works. I&apos;m open to opportunities across the
-              U.S.; Northern Virginia is ideal.
-            </p>
-            <div className='mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-semibold'>
-              <Link
-                href='/research'
-                className='text-link rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2'
-              >
-                View research
-              </Link>
-              <Link
-                href='/resume'
-                className='text-link rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2'
-              >
-                Résumé
-              </Link>
-              <Link
-                href='/contact'
-                className='text-link rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2'
-              >
-                Get in touch
-              </Link>
-            </div>
-          </aside>
-
-          <SocialHome className='mt-6 mb-8 flex-shrink flex-wrap gap-3 self-start' />
+          <SocialHome className='mt-7 flex-shrink flex-wrap gap-3 self-start' />
         </section>
 
-        {NEWS.length > 0 && (
-          <section className='border-t border-gray-200 pt-8 pb-4 dark:border-gray-800'>
-            <h3 className='mb-1 text-2xl font-bold tracking-tight text-black md:mb-3 dark:text-white'>News</h3>
-            <p className='mb-6 text-gray-600 md:mb-8 dark:text-gray-400'>
-              Recent updates from the lab and the rest of the trail.{' '}
-              <Link href='/research#news' className='text-link'>
-                See full timeline
-              </Link>
-            </p>
-            <NewsTimeline items={NEWS} showHeading={false} className='mb-8' />
-          </section>
-        )}
+        {/* Research */}
+        <section id='research' className='scroll-mt-24 border-b border-gray-200 py-12 dark:border-gray-800'>
+          <SectionHeading
+            eyebrow='Academic work'
+            title='Research & healthcare AI'
+            description='Projects exploring how machine learning can support medical imaging, clinical prediction, and interpretable analysis.'
+          />
+          <div className='grid gap-5 md:grid-cols-2'>
+            {research.map((item, index) => (
+              <article
+                key={item.title}
+                className={`rounded-2xl border border-gray-200 bg-white/70 p-6 shadow-sm backdrop-blur-sm dark:border-gray-800 dark:bg-gray-950/50 ${index === 0 ? 'md:col-span-2' : ''}`}
+              >
+                <p className='text-xs font-semibold tracking-wider text-purple-600 uppercase dark:text-purple-300'>
+                  {item.category}
+                </p>
+                <h3 className='mt-2 text-xl font-bold text-gray-950 dark:text-white'>{item.title}</h3>
+                <p className='mt-1 text-sm font-semibold text-gray-700 dark:text-gray-300'>{item.subtitle}</p>
+                <p className='mt-3 text-sm leading-7 text-gray-600 dark:text-gray-400'>{item.description}</p>
+                {index === 0 && (
+                  <p className='mt-3 text-xs leading-6 text-gray-500 dark:text-gray-400'>
+                    Supervisor: Md. Saiful Bari Siddiqui · Co-supervisor: Dr. Swakkhar Shatabda
+                  </p>
+                )}
+                <div className='mt-5 flex flex-wrap gap-2'>
+                  {item.tags.map((tag) => <Tag key={tag}>{tag}</Tag>)}
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
 
-        {latestBlogWithViews && (
-          <section className='border-t border-gray-200 pt-8 pb-4 dark:border-gray-800'>
-            <h3 className='mb-1 text-2xl font-bold tracking-tight text-black md:mb-3 dark:text-white'>Latest Blog</h3>
-            <p className='mb-6 text-gray-600 md:mb-8 dark:text-gray-400'>
-              Fresh thoughts on AI, graphics, and tech.{' '}
-              <Link href='/blog' className='text-link'>
-                Read all blogs
-              </Link>
-            </p>
-            <BlogItem {...latestBlogWithViews} displayViews />
-          </section>
-        )}
+        {/* Experience */}
+        <section id='experience' className='scroll-mt-24 border-b border-gray-200 py-12 dark:border-gray-800'>
+          <SectionHeading
+            eyebrow='Professional journey'
+            title='Experience & education'
+            description='Combining academic research, hands-on ML work, and software development.'
+          />
+          <div className='grid gap-5 md:grid-cols-2'>
+            <article className='rounded-2xl border border-gray-200 p-6 dark:border-gray-800'>
+              <p className='text-xs font-semibold tracking-wider text-purple-600 uppercase dark:text-purple-300'>
+                Jul – Oct 2026
+              </p>
+              <h3 className='mt-2 text-lg font-bold dark:text-white'>Machine Learning Engineering Intern</h3>
+              <p className='font-medium text-gray-700 dark:text-gray-300'>FlyRank AI</p>
+              <p className='mt-3 text-sm leading-7 text-gray-600 dark:text-gray-400'>
+                Developed a Google Search ranking and discoverability capstone using
+                approximately 30,000 Google Search Console/GA4 records. Used
+                data wrangling, embeddings, clustering, and opportunity modeling.
+                Corrected an optimistic initial evaluation using client-grouped splits;
+                out-of-sample Precision@10 was 0.40.
+              </p>
+            </article>
+            <article className='rounded-2xl border border-gray-200 p-6 dark:border-gray-800'>
+              <p className='text-xs font-semibold tracking-wider text-purple-600 uppercase dark:text-purple-300'>
+                2022 – Jan 2027 (expected)
+              </p>
+              <h3 className='mt-2 text-lg font-bold dark:text-white'>Bachelor in Computer Science</h3>
+              <p className='font-medium text-gray-700 dark:text-gray-300'>BRAC University</p>
+              <p className='mt-3 text-sm leading-7 text-gray-600 dark:text-gray-400'>
+                Coursework includes machine learning, neural networks, software
+                engineering, database management, and computer networks. Undergraduate
+                research focuses on multimodal healthcare AI.
+              </p>
+            </article>
+          </div>
+        </section>
 
-        {featuredResearchWithViews.length > 0 && (
-          <section className='border-t border-gray-200 pt-8 pb-4 dark:border-gray-800'>
-            <h3 className='mb-1 text-2xl font-bold tracking-tight text-black md:mb-3 dark:text-white'>
-              Featured Research
-            </h3>
-            <p className='mb-6 text-gray-600 md:mb-8 dark:text-gray-400'>
-              Papers and projects at the intersection of AI and 3D computer graphics.{' '}
-              <Link href='/research' className='text-link'>
-                View all research
-              </Link>
-            </p>
-            <div className='flex flex-col'>
-              {featuredResearchWithViews.slice(0, 2).map((entry, i) => (
-                <ResearchItem key={entry.slug} {...entry} priority={i === 0} />
-              ))}
-            </div>
-          </section>
-        )}
+        {/* Engineering portfolio */}
+        <section id='projects' className='scroll-mt-24 border-b border-gray-200 py-12 dark:border-gray-800'>
+          <SectionHeading
+            eyebrow='Selected builds'
+            title='Software & AI projects'
+            description='Applications and tools built for real users, practical workflows, and technical exploration.'
+          />
+          <div className='grid gap-5 md:grid-cols-2'>
+            {projects.map((project) => (
+              <article key={project.title} className='rounded-2xl border border-gray-200 bg-white/70 p-6 transition hover:border-purple-300 dark:border-gray-800 dark:bg-gray-950/50 dark:hover:border-purple-700'>
+                <p className='text-xs font-semibold tracking-wider text-purple-600 uppercase dark:text-purple-300'>{project.category}</p>
+                <h3 className='mt-2 text-xl font-bold text-gray-950 dark:text-white'>{project.title}</h3>
+                <p className='mt-3 text-sm leading-7 text-gray-600 dark:text-gray-400'>{project.description}</p>
+                <div className='mt-5 flex flex-wrap gap-2'>
+                  {project.tags.map((tag) => <Tag key={tag}>{tag}</Tag>)}
+                </div>
+              </article>
+            ))}
+          </div>
+          <a
+            className='mt-6 inline-block text-sm font-semibold text-purple-700 hover:underline dark:text-purple-300'
+            href='https://github.com/pretom26?tab=repositories'
+            target='_blank'
+            rel='noopener noreferrer'
+          >
+            Explore my GitHub repositories ↗
+          </a>
+        </section>
 
-        <TeachingSection />
+        {/* Skills and personal dimension */}
+        <section className='border-b border-gray-200 py-12 dark:border-gray-800'>
+          <SectionHeading
+            eyebrow='Toolbox'
+            title='Technical skills'
+            description='Tools I use across machine learning research and application development.'
+          />
+          <div className='grid gap-5 md:grid-cols-3'>
+            {skills.map((skill) => (
+              <div key={skill.label} className='rounded-2xl border border-gray-200 p-5 dark:border-gray-800'>
+                <h3 className='font-bold text-gray-900 dark:text-white'>{skill.label}</h3>
+                <p className='mt-3 text-sm leading-7 text-gray-600 dark:text-gray-400'>{skill.items}</p>
+              </div>
+            ))}
+          </div>
+        </section>
 
-        <PortfolioList
-          description={`Check out my featured portfolio. View all my works <a href="/portfolio">here</a>!`}
-          title='Featured Portfolio'
-          portfolios={portfoliosWithViews}
-        />
+        <section id='contact' className='scroll-mt-24 py-12'>
+          <SectionHeading
+            eyebrow='Get in touch'
+            title='Let’s build something useful.'
+            description='I’m interested in meaningful collaborations around AI, machine learning, research, and software engineering.'
+          />
+          <div className='flex flex-wrap gap-3'>
+            <a
+              href={`mailto:${SITE_AUTHOR.email}`}
+              className='rounded-lg bg-purple-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-purple-700'
+            >
+              Email me
+            </a>
+            <a
+              href='https://www.linkedin.com/in/pretom-areefin-pranto-a97651290/'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='rounded-lg border border-gray-300 px-5 py-3 text-sm font-semibold text-gray-900 transition hover:border-purple-400 dark:border-gray-700 dark:text-white'
+            >
+              LinkedIn ↗
+            </a>
+          </div>
+          <p className='mt-8 text-xs text-gray-500 dark:text-gray-500'>
+            Based in Dhaka, Bangladesh · Outside the code: Hip-Hop, Technical Writing and Martial Arts (Kung-Fu).
+          </p>
+        </section>
       </main>
     </>
   )

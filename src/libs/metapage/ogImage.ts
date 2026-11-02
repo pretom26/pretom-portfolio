@@ -27,7 +27,7 @@ export const generateOgImage = (payload: genOgImagePayload) => {
     process.env.NEXT_PUBLIC_OG_VERSION ||
     (process.env.VERCEL_GIT_COMMIT_SHA ? process.env.VERCEL_GIT_COMMIT_SHA.slice(0, 7) : '5.0')
 
-  const params = new URLSearchParams({ title: payload?.title ?? 'Ahnaf An Nafee', v: version })
+  const params = new URLSearchParams({ title: payload?.title ?? 'Pretom Areefin Pranto', v: version })
 
   if (payload?.subTitle) params.set('subtitle', payload.subTitle)
   if (payload?.theme) params.set('theme', payload.theme)

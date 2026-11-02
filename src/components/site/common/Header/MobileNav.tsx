@@ -15,14 +15,16 @@ import NextLink from 'next/link'
 import { CgFileDocument } from 'react-icons/cg'
 import { HiMenuAlt4, HiOutlineBeaker } from 'react-icons/hi'
 import type { IconType } from 'react-icons/lib'
-import { RiContactsBookLine, RiHome6Line, RiPenNibLine, RiReactjsLine } from 'react-icons/ri'
+import { RiMailLine, RiUserLine, RiContactsBookLine, RiHome6Line,  RiReactjsLine } from 'react-icons/ri'
 
 const icon: Record<string, IconType> = {
   home: RiHome6Line,
   portfolio: RiReactjsLine,
-  blog: RiPenNibLine,
+
+  contact: RiMailLine,
   research: HiOutlineBeaker,
   guestbook: RiContactsBookLine,
+  about: RiUserLine,
   resume: CgFileDocument
 }
 

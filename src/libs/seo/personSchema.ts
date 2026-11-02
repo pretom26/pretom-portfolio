@@ -1,11 +1,11 @@
-// Canonical Person entity for the site. Emit the full node ONCE on the home
-// page; reference it by @id from BlogPosting.author/publisher,
-// SoftwareSourceCode.author, and any other schema that needs a Person.
-//
-// Why a single source: AI search engines (Google AI Mode, ChatGPT, Perplexity)
-// build entity graphs across pages — duplicate Person nodes either get
-// deduplicated (best case) or weaken entity confidence (worst case).
-// Cross-referencing by @id keeps the graph coherent.
+
+/**
+ * Canonical Person schema
+ * Pretom Areefin Pranto
+ *
+ * Personal details are based on the resume and GitHub profile.
+ * The undergraduate thesis is completed; the degree is in progress.
+ */
 
 import {
   PERSON_ID,
@@ -18,6 +18,8 @@ import {
 
 export { PERSON_ID }
 
+// Use this lightweight reference from other pages.
+// The complete Person object should be emitted on the homepage.
 export const PERSON_REFERENCE = {
   '@type': 'Person',
   '@id': PERSON_ID,
@@ -25,150 +27,85 @@ export const PERSON_REFERENCE = {
   url: SITE_URL
 } as const
 
+// Search engines should receive an absolute image URL.
+const PROFILE_IMAGE_URL = new URL(
+  PROFILE_IMAGE,
+  SITE_URL
+).toString()
+
 export const getPersonNode = () => ({
   '@type': 'Person',
   '@id': PERSON_ID,
+
   name: SITE_AUTHOR.name,
   alternateName: SITE_AUTHOR.githubUsername,
   url: SITE_URL,
-  // ImageObject (rather than a bare URL string) so Google has explicit
-  // dimensions + caption for the Knowledge Graph / name-search thumbnail.
-  // Required by https://developers.google.com/search/docs/appearance/structured-data/profile-page
+
   image: {
     '@type': 'ImageObject',
-    url: PROFILE_IMAGE,
+    url: PROFILE_IMAGE_URL,
+    contentUrl: PROFILE_IMAGE_URL,
     width: PROFILE_IMAGE_WIDTH,
     height: PROFILE_IMAGE_HEIGHT,
-    caption: SITE_AUTHOR.name,
-    contentUrl: PROFILE_IMAGE
+    caption: SITE_AUTHOR.name
   },
-  sameAs: [
-    // Wikidata first — it's the strongest entity-graph signal Google has,
-    // and is what surfaces a Knowledge Panel when someone searches the name.
-    'https://www.wikidata.org/wiki/Q139567752',
-    'https://www.linkedin.com/in/ahnafnafee',
-    'https://github.com/ahnafnafee',
-    'https://scholar.google.com/citations?user=u15DO0cAAAAJ&hl=en',
-    'https://orcid.org/0009-0000-9363-4536',
-    'https://ahnafnafee.itch.io',
-    'https://www.artstation.com/ahnafnafee',
-    'https://www.behance.net/ahnafannafee',
-    'https://www.facebook.com/ahnaf26',
-    'https://www.instagram.com/ahnaf_nafee'
-  ],
-  // identifier lets Google directly bind this Person node to the Wikidata
-  // entity by Q-id, in addition to the sameAs URL above.
-  identifier: [
-    {
-      '@type': 'PropertyValue',
-      propertyID: 'wikidata',
-      value: 'Q139567752',
-      url: 'https://www.wikidata.org/wiki/Q139567752'
-    }
-  ],
+
   email: SITE_AUTHOR.email,
-  jobTitle: 'PhD Student in Computer Science',
-  hasOccupation: {
-    '@type': 'Occupation',
-    name: 'Computer Science Researcher',
-    occupationLocation: {
-      '@type': 'Place',
-      name: 'George Mason University, Fairfax, VA'
-    },
-    skills: [
-      'Artificial Intelligence',
-      '3D Computer Graphics',
-      'Machine Learning',
-      'DevOps Engineering',
-      'Cloud Infrastructure',
-      'Kubernetes',
-      'Research & Development'
-    ]
-  },
-  worksFor: {
-    '@type': 'Organization',
-    name: 'George Mason University',
-    url: 'https://www.gmu.edu',
-    address: {
-      '@type': 'PostalAddress',
-      addressLocality: 'Fairfax',
-      addressRegion: 'VA',
-      addressCountry: 'US'
-    }
-  },
-  alumniOf: [
-    {
-      '@type': 'Organization',
-      name: 'George Mason University',
-      url: 'https://www.gmu.edu'
-    },
-    {
-      '@type': 'Organization',
-      name: 'Drexel University',
-      url: 'https://drexel.edu'
-    }
+
+  description:
+    'Computer Science undergraduate at BRAC University, with experience in machine learning engineering, healthcare AI, multimodal machine learning, and full-stack software development. Completed the NeuroVentura undergraduate thesis on Alzheimer’s disease risk and progression prediction. Previously a Machine Learning Engineering Intern at FlyRank AI.',
+
+  // Public profiles listed in the resume.
+  sameAs: [
+    'https://github.com/pretom26',
+    'https://www.linkedin.com/in/pretom-areefin-pranto-a97651290/'
   ],
+
+  // Current academic affiliation.
+  // Not listed as alumni because the degree is not yet complete.
+  affiliation: {
+    '@type': 'CollegeOrUniversity',
+    name: 'BRAC University',
+    url: 'https://www.bracu.ac.bd/'
+  },
+
+  homeLocation: {
+    '@type': 'Place',
+    name: 'Dhaka, Bangladesh'
+  },
+
   knowsAbout: [
     'Artificial Intelligence',
-    '3D Computer Graphics',
-    'Machine Learning for Graphics',
-    'AI-driven 3D Content Generation',
-    'Generative AI',
-    'Computer Vision',
+    'Machine Learning',
     'Deep Learning',
+    'Multimodal Machine Learning',
+    'Healthcare AI',
+    'Medical Image Classification',
+    'Computer Vision',
     'Neural Networks',
-    'Rendering Pipelines',
-    'Real-time Rendering',
-    'Parameterized Shaders',
-    'UV Mapping Automation',
-    'NPR Techniques',
-    'Human Computer Interaction',
-    'Immersive Technology',
-    'Extended Reality',
-    'Game Development',
-    'Unity Engine',
-    'Unreal Engine',
-    'WebGL',
-    'GLSL',
-    'Python Programming',
+    'Convolutional Neural Networks',
+    'Transfer Learning',
+    'ResNet',
+    'DenseNet',
     'PyTorch',
-    'TensorFlow',
-    'Computer Graphics Research',
-    'AI Research'
-  ],
-  researchInterests: [
-    'AI-driven creative workflows for 3D content generation',
-    'Machine learning for graphics pipelines',
-    'Automating UV mapping and NPR techniques',
-    'Human-computer interaction in immersive environments'
-  ],
-  affiliation: {
-    '@type': 'Organization',
-    name: 'DCXR Lab, George Mason University',
-    url: 'https://craigyuyu.github.io/home/group.html'
-  },
-  hasCredential: [
-    {
-      '@type': 'EducationalOccupationalCredential',
-      name: 'PhD in Computer Science',
-      educationalLevel: 'Doctoral',
-      credentialCategory: 'degree',
-      recognizedBy: {
-        '@type': 'Organization',
-        name: 'George Mason University'
-      }
-    },
-    {
-      '@type': 'EducationalOccupationalCredential',
-      name: 'BS in Computer Science',
-      educationalLevel: 'Bachelor',
-      credentialCategory: 'degree',
-      recognizedBy: {
-        '@type': 'Organization',
-        name: 'Drexel University'
-      }
-    }
-  ],
-  description:
-    'PhD student at GMU exploring how machine learning transforms 3D content creation and immersive experiences. Research at the intersection of AI and computer graphics.'
+    'MONAI',
+    'scikit-learn',
+    'XGBoost',
+    'Pandas',
+    'NumPy',
+    'Python',
+    'JavaScript',
+    'PHP',
+    'SQL',
+    'MongoDB',
+    'Express.js',
+    'React',
+    'Node.js',
+    'REST APIs',
+    'Full-Stack Web Development',
+    'Software Engineering',
+    'Data Annotation',
+    'Git',
+    'GitHub'
+  ]
 })

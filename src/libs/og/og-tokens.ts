@@ -21,9 +21,9 @@ export const OG_FONT_FAMILY = {
 export const OG_BG = '#0b0d12'
 export const OG_FG = '#f5f7fa'
 export const OG_FG_MUTED = '#94a3b8'
-export const OG_AUTHOR_LINE = 'Ahnaf An Nafee'
-export const OG_AUTHOR_ROLE = 'PhD · AI & 3D Graphics · DCXR Lab @ GMU'
-export const OG_DOMAIN = 'ahnafnafee.dev'
+export const OG_AUTHOR_LINE = 'Pretom Areefin Pranto'
+export const OG_AUTHOR_ROLE = 'Computer Science | Machine Learning | Healthcare AI'
+export const OG_DOMAIN = new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000').hostname
 
 // Multi-line printout rendered on the home OG card in place of a flat
 // subtitle. Each line reads as `> {label} · {value}` in a monospace
@@ -31,7 +31,7 @@ export const OG_DOMAIN = 'ahnafnafee.dev'
 export const HOME_PROMPT_LINES: ReadonlyArray<{ label: string; value: string }> = [
   { label: 'role', value: 'PhD Student' },
   { label: 'focus', value: 'AI × 3D Graphics' },
-  { label: 'lab', value: 'DCXR Lab @ GMU' }
+  { label: 'focus', value: 'Healthcare AI' }
 ] as const
 
 const HOME_ACCENT: OgAccent = {

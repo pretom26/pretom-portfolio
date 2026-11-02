@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 
 export async function GET() {
   const data = {
-    name: 'Ahnaf An Nafee',
+    name: 'Pretom Areefin Pranto',
     status: 'Alive'
   }
 

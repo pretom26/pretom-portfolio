@@ -63,7 +63,7 @@ export const SocialHome: React.FunctionComponent<SocialHomeProps> = (props) => {
             ) : (
               <>
                 <social.icon className={twclsx('h-5 w-5', props.iconStyle)} />
-                <span className='sr-only'>Connect with Ahnaf An Nafee on {social.title}</span>
+                <span className='sr-only'>Connect with Pretom Areefin Pranto on {social.title}</span>
               </>
             )}
           </UnstyledLink>

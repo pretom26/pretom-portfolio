@@ -1,273 +1,367 @@
-import { StarfieldBackground } from '@/components/site/StarfieldBackground'
-
-import { SITE_AUTHOR } from '@/libs/constants/site'
-import { generateOgImage } from '@/libs/metapage'
 
 import type { Metadata } from 'next'
+import Link from 'next/link'
 
-const PRIVACY_OG_IMAGE = generateOgImage({
+import { StarfieldBackground } from '@/components/site/StarfieldBackground'
+
+import {
+  SITE_AUTHOR,
+  SITE_NAME,
+  SITE_URL
+} from '@/libs/constants/site'
+
+import { generateOgImage } from '@/libs/metapage'
+
+// ============================================
+// PRIVACY POLICY CONFIGURATION
+// ============================================
+
+const BASE_URL = SITE_URL.replace(/\/+$/, '')
+const PAGE_URL = `${BASE_URL}/privacy-policy`
+
+const PAGE_TITLE = `Privacy Policy | ${SITE_NAME}`
+
+const PAGE_DESCRIPTION =
+  'Privacy information for the personal portfolio of Pretom Areefin Pranto, including technical data, external services, and contact information.'
+
+const OG_IMAGE = generateOgImage({
   title: 'Privacy Policy',
-  subTitle: 'How this site handles data, cookies, and ads',
+  subTitle: 'Pretom Areefin Pranto',
   type: 'page'
 })
 
+// ============================================
+// SEO METADATA
+// ============================================
+
 export const metadata: Metadata = {
-  title: 'Privacy Policy - Ahnaf An Nafee',
-  description:
-    'Privacy policy for ahnafnafee.dev — how cookies, analytics, and third-party advertising (Google AdSense) are used on this site.',
-  keywords: ['privacy policy', 'cookies', 'google adsense', 'analytics', 'ahnafnafee privacy'],
+  title: PAGE_TITLE,
+  description: PAGE_DESCRIPTION,
+
   alternates: {
-    canonical: 'https://www.ahnafnafee.dev/privacy-policy'
+    canonical: PAGE_URL
   },
+
   openGraph: {
-    title: 'Privacy Policy - Ahnaf An Nafee',
-    description: 'How cookies, analytics, and third-party advertising are used on ahnafnafee.dev',
-    url: 'https://www.ahnafnafee.dev/privacy-policy',
-    siteName: 'Ahnaf An Nafee',
+    title: PAGE_TITLE,
+    description: PAGE_DESCRIPTION,
+    url: PAGE_URL,
+    siteName: SITE_NAME,
+    type: 'website',
     images: [
       {
-        url: PRIVACY_OG_IMAGE,
+        url: OG_IMAGE,
         width: 1200,
         height: 600,
-        alt: 'Privacy Policy - Ahnaf An Nafee'
+        alt: PAGE_TITLE
       }
-    ],
-    locale: 'en_US',
-    type: 'website'
+    ]
   },
+
   twitter: {
     card: 'summary_large_image',
-    title: 'Privacy Policy - Ahnaf An Nafee',
-    description: 'How cookies, analytics, and third-party advertising are used on ahnafnafee.dev',
-    images: [PRIVACY_OG_IMAGE]
+    title: PAGE_TITLE,
+    description: PAGE_DESCRIPTION,
+    images: [OG_IMAGE]
   }
 }
+
+// ============================================
+// PRIVACY POLICY PAGE
+// ============================================
 
 export default function PrivacyPolicyPage() {
   return (
     <>
       <StarfieldBackground />
+
       <main className='layout'>
-        <div className='mx-auto max-w-4xl py-8'>
-          <h1 className='mb-8 text-3xl font-bold tracking-tight text-black md:text-4xl dark:text-white'>
-            Privacy Policy
-          </h1>
+        <div className='mx-auto max-w-4xl py-10 md:py-14'>
 
-          <div className='prose prose-gray dark:prose-invert max-w-none'>
-            <section className='mb-8'>
-              <p className='mb-4'>
-                This Privacy Policy explains what information is collected when you visit <code>ahnafnafee.dev</code>{' '}
-                (the &ldquo;Site&rdquo;), how it is used, and the choices you have. This is a personal portfolio and
-                blog operated by {SITE_AUTHOR.name}. By using the Site, you consent to the practices described here.
+          <header className='border-b border-gray-200 pb-8 dark:border-gray-800'>
+
+            <p className='text-xs font-semibold tracking-[0.2em] text-purple-600 uppercase dark:text-purple-300'>
+              WEBSITE INFORMATION / PRIVACY
+            </p>
+
+            <h1 className='mt-4 text-3xl font-extrabold tracking-tight text-gray-950 md:text-5xl dark:text-white'>
+              Privacy Policy
+            </h1>
+
+            <p className='mt-5 max-w-3xl text-base leading-8 text-gray-600 dark:text-gray-300'>
+              This page explains how information may
+              be handled when you visit the personal
+              portfolio of {SITE_AUTHOR.name}.
+            </p>
+
+            <p className='mt-4 text-sm text-gray-500 dark:text-gray-400'>
+              Last updated: November 2, 2026
+            </p>
+
+          </header>
+
+          <div className='prose prose-gray dark:prose-invert mt-10 max-w-none'>
+
+            <section>
+              <h2>1. About This Website</h2>
+
+              <p>
+                This website is a personal academic
+                and professional portfolio maintained
+                by {SITE_AUTHOR.name}.
+              </p>
+
+              <p>
+                It presents academic background,
+                research interests, software projects,
+                professional experience, and contact
+                information.
+              </p>
+
+              <p>
+                Browsing the portfolio does not require
+                creating a visitor account.
               </p>
             </section>
 
-            <section className='mb-8'>
-              <h2 className='mb-4 text-2xl font-semibold'>Information I Collect</h2>
-              <p className='mb-4'>
-                I do not ask you to create an account and I do not directly collect personal information such as your
-                name or address just for browsing. The Site does collect limited data automatically and through the
-                third-party services below:
+            <section className='mt-10'>
+              <h2>2. Information You Provide</h2>
+
+              <p>
+                If you contact me through email,
+                LinkedIn, or another external service,
+                I may receive the information you
+                choose to share.
               </p>
-              <ul className='mb-4 list-disc pl-6'>
-                <li>
-                  <strong>Usage and device data</strong> — pages visited, referring page, approximate location, browser
-                  type, and device information, gathered by the analytics providers described below.
-                </li>
-                <li>
-                  <strong>Cookies and similar technologies</strong> — small files stored by your browser, used by
-                  advertising and analytics partners (see below).
-                </li>
-                <li>
-                  <strong>Information you choose to send</strong> — if you email me or post a comment, I receive
-                  whatever you include (for example, your email address or GitHub username).
-                </li>
+
+              <p>
+                This may include your name, email
+                address, message content, professional
+                details, or other information you
+                voluntarily provide.
+              </p>
+
+              <p>
+                I use correspondence to understand
+                and respond to your inquiry, discuss
+                collaborations, or communicate about
+                relevant opportunities.
+              </p>
+            </section>
+
+            <section className='mt-10'>
+              <h2>3. Technical Information</h2>
+
+              <p>
+                As with most websites, hosting
+                infrastructure may process technical
+                information needed to deliver pages
+                and maintain service reliability.
+              </p>
+
+              <p>
+                Depending on the hosting configuration,
+                this can include:
+              </p>
+
+              <ul>
+                <li>Requested pages and request times</li>
+                <li>Browser and device information</li>
+                <li>IP addresses and network information</li>
+                <li>Error logs and performance measurements</li>
+                <li>Referring pages or traffic information</li>
               </ul>
-            </section>
 
-            <section className='mb-8'>
-              <h2 className='mb-4 text-2xl font-semibold'>Cookies and Web Beacons</h2>
-              <p className='mb-4'>
-                The Site uses cookies to store visitor preferences and to record data for the third-party services
-                below. You can disable cookies through your browser settings; doing so does not prevent you from reading
-                the Site, though some features may behave differently.
+              <p>
+                Such information may be used for
+                website delivery, troubleshooting,
+                security, and understanding technical
+                performance.
               </p>
             </section>
 
-            <section className='mb-8'>
-              <h2 className='mb-4 text-2xl font-semibold'>Advertising — Google AdSense</h2>
-              <p className='mb-4'>
-                This Site displays ads served by Google AdSense, a third-party advertising vendor. Google and its
-                partners use cookies (including the DoubleClick DART cookie) to serve ads based on your prior visits to
-                this Site and other sites on the internet.
+            <section className='mt-10'>
+              <h2>4. Analytics and Performance Tools</h2>
+
+              <p>
+                Website hosting, analytics, or
+                performance-monitoring integrations
+                may process usage and diagnostic
+                information when those services
+                are enabled.
               </p>
-              <ul className='mb-4 list-disc pl-6'>
-                <li>
-                  Google&rsquo;s use of advertising cookies enables it and its partners to serve ads to you based on
-                  your visits to this and other websites.
-                </li>
-                <li>
-                  You may opt out of personalized advertising by visiting{' '}
-                  <a
-                    href='https://www.google.com/settings/ads'
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    className='text-link'
-                  >
-                    Google Ads Settings
-                  </a>
-                  .
-                </li>
-                <li>
-                  You can opt out of third-party vendor cookies for personalized advertising at{' '}
-                  <a
-                    href='https://www.aboutads.info/choices/'
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    className='text-link'
-                  >
-                    aboutads.info/choices
-                  </a>
-                  .
-                </li>
-                <li>
-                  For more detail, see{' '}
-                  <a
-                    href='https://policies.google.com/technologies/partner-sites'
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    className='text-link'
-                  >
-                    How Google uses information from sites that use its services
-                  </a>
-                  .
-                </li>
-              </ul>
+
+              <p>
+                The specific information processed,
+                storage methods, and retention periods
+                depend on the services configured
+                for the deployed website.
+              </p>
+
+              <p>
+                Optional analytics or tracking
+                providers should be identified in
+                this policy before they are enabled
+                on the published site.
+              </p>
             </section>
 
-            <section className='mb-8'>
-              <h2 className='mb-4 text-2xl font-semibold'>Analytics</h2>
-              <p className='mb-4'>
-                The Site uses the following analytics services to understand traffic and performance:
+            <section className='mt-10'>
+              <h2>5. Cookies and Local Storage</h2>
+
+              <p>
+                Browser storage may be used to
+                remember interface preferences,
+                such as the selected appearance
+                or color theme.
               </p>
-              <ul className='mb-4 list-disc pl-6'>
-                <li>
-                  <strong>Google Analytics</strong> — measures aggregate traffic and usage. Google&rsquo;s handling of
-                  this data is governed by the{' '}
-                  <a
-                    href='https://policies.google.com/privacy'
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    className='text-link'
-                  >
-                    Google Privacy Policy
-                  </a>
-                  .
-                </li>
-                <li>
-                  <strong>Vercel Analytics and Speed Insights</strong> — privacy-friendly, aggregated performance and
-                  traffic metrics collected by the Site&rsquo;s host, Vercel. See the{' '}
-                  <a
-                    href='https://vercel.com/legal/privacy-policy'
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    className='text-link'
-                  >
-                    Vercel Privacy Policy
-                  </a>
-                  .
-                </li>
-                <li>
-                  <strong>Microsoft Clarity</strong> — records aggregated heatmaps and session replays of how visitors
-                  interact with pages. Clarity masks text and input content by default. See the{' '}
-                  <a
-                    href='https://privacy.microsoft.com/privacystatement'
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    className='text-link'
-                  >
-                    Microsoft Privacy Statement
-                  </a>
-                  .
-                </li>
-              </ul>
+
+              <p>
+                Some hosting or third-party services
+                may also use cookies or similar
+                technologies, depending on their
+                configuration.
+              </p>
+
+              <p>
+                You can manage or clear cookies
+                and website storage through
+                your browser settings.
+              </p>
             </section>
 
-            <section className='mb-8'>
-              <h2 className='mb-4 text-2xl font-semibold'>Comments</h2>
-              <p className='mb-4'>
-                Blog comments are powered by Giscus, which stores discussions in GitHub Discussions. To comment you sign
-                in with a GitHub account, and any comment you post is public. This processing is governed by the{' '}
-                <a
-                  href='https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement'
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='text-link'
+            <section className='mt-10'>
+              <h2>6. External Websites and Services</h2>
+
+              <p>
+                This portfolio links to external
+                platforms such as GitHub, LinkedIn,
+                Google Colab, and deployed project
+                demonstrations.
+              </p>
+
+              <p>
+                Some contact buttons open Gmail
+                to help visitors compose messages.
+              </p>
+
+              <p>
+                When you visit an external platform,
+                its own privacy practices and terms
+                apply. I do not control how those
+                providers collect or process data.
+              </p>
+
+              <p>
+                Third-party resources, if embedded
+                or loaded on a page, may also
+                receive standard browser requests.
+              </p>
+            </section>
+
+            <section className='mt-10'>
+              <h2>7. Data Retention</h2>
+
+              <p>
+                Information voluntarily sent
+                through correspondence may be
+                retained as needed to respond to
+                inquiries and maintain relevant
+                communication records.
+              </p>
+
+              <p>
+                Technical data retained by hosting
+                or external services is subject
+                to those providers&apos; applicable
+                settings and retention policies.
+              </p>
+            </section>
+
+            <section className='mt-10'>
+              <h2>8. Your Privacy Choices</h2>
+
+              <p>
+                You may choose not to share personal
+                information when browsing this
+                portfolio.
+              </p>
+
+              <p>
+                You may also adjust browser privacy
+                settings, manage stored website
+                information, and contact me regarding
+                information you have sent directly.
+              </p>
+
+              <p>
+                Requests concerning personal data
+                will be considered in accordance
+                with applicable obligations and
+                available technical capabilities.
+              </p>
+            </section>
+
+            <section className='mt-10'>
+              <h2>9. Children&apos;s Privacy</h2>
+
+              <p>
+                This portfolio is intended to
+                present academic and professional
+                information. It is not designed
+                as a service directed specifically
+                toward children.
+              </p>
+            </section>
+
+            <section className='mt-10'>
+              <h2>10. Changes to This Policy</h2>
+
+              <p>
+                This policy may be updated as
+                the portfolio changes or as new
+                features and service providers
+                are introduced.
+              </p>
+
+              <p>
+                Material changes will be reflected
+                on this page together with an
+                updated revision date.
+              </p>
+            </section>
+
+            <section className='mt-10'>
+              <h2>11. Contact</h2>
+
+              <p>
+                If you have questions about this
+                policy or information shared
+                directly with me, please contact:
+              </p>
+
+              <div className='not-prose mt-5 rounded-xl border border-purple-200 bg-purple-50 p-5 dark:border-purple-900 dark:bg-purple-950/20'>
+
+                <p className='font-semibold text-gray-950 dark:text-white'>
+                  {SITE_AUTHOR.name}
+                </p>
+
+                <p className='mt-2 break-all text-sm text-gray-700 dark:text-gray-300'>
+                  {SITE_AUTHOR.email}
+                </p>
+
+                <Link
+                  href='/contact'
+                  className='mt-4 inline-flex text-sm font-semibold text-purple-700 hover:underline dark:text-purple-300'
                 >
-                  GitHub Privacy Statement
-                </a>
-                .
-              </p>
-            </section>
+                  Visit Contact Page
+                </Link>
 
-            <section className='mb-8'>
-              <h2 className='mb-4 text-2xl font-semibold'>Images and Media</h2>
-              <p className='mb-4'>
-                Images are delivered through the ImageKit content delivery network and, in some posts, embedded YouTube
-                videos. These providers may receive your IP address and standard request data in order to serve content.
-              </p>
-            </section>
-
-            <section className='mb-8'>
-              <h2 className='mb-4 text-2xl font-semibold'>External Links</h2>
-              <p className='mb-4'>
-                The Site links to external websites that I do not control. This Privacy Policy does not apply to those
-                sites, and I encourage you to review their privacy policies.
-              </p>
-            </section>
-
-            <section className='mb-8'>
-              <h2 className='mb-4 text-2xl font-semibold'>Children&rsquo;s Privacy</h2>
-              <p className='mb-4'>
-                The Site is not directed to children under the age of 13, and I do not knowingly collect personal
-                information from children. If you believe a child has provided such information, please contact me and I
-                will remove it.
-              </p>
-            </section>
-
-            <section className='mb-8'>
-              <h2 className='mb-4 text-2xl font-semibold'>Your Choices</h2>
-              <ul className='mb-4 list-disc pl-6'>
-                <li>Adjust or block cookies through your browser settings.</li>
-                <li>Opt out of personalized ads using the links in the Advertising section above.</li>
-                <li>Use browser privacy extensions or &ldquo;Do Not Track&rdquo; signals as you prefer.</li>
-                <li>Contact me to ask what information you have sent me directly and to request its deletion.</li>
-              </ul>
-            </section>
-
-            <section className='mb-8'>
-              <h2 className='mb-4 text-2xl font-semibold'>Changes to This Policy</h2>
-              <p className='mb-4'>
-                I may update this Privacy Policy from time to time. Changes take effect when posted on this page, and
-                the &ldquo;Last Updated&rdquo; date below reflects the latest revision.
-              </p>
-            </section>
-
-            <section className='mb-8'>
-              <h2 className='mb-4 text-2xl font-semibold'>Contact</h2>
-              <div className='rounded-lg bg-gray-50 p-4 dark:bg-gray-800'>
-                <p>
-                  <strong>Email:</strong>{' '}
-                  <a href={`mailto:${SITE_AUTHOR.email}`} className='text-link'>
-                    {SITE_AUTHOR.email}
-                  </a>
-                </p>
-                <p>
-                  <strong>Last Updated:</strong> July 2026
-                </p>
               </div>
             </section>
+
           </div>
+
         </div>
       </main>
     </>

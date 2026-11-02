@@ -1,43 +1,19 @@
 const SOCIAL = [
   {
     title: 'Email',
-    href: 'mailto: ahnafnafee@gmail.com?subject='
+    href: 'mailto:pretomareefin@gmail.com?subject='
   },
   {
     title: 'LinkedIn',
-    href: 'https://linkedin.com/in/ahnafnafee'
+    href: 'https://www.linkedin.com/in/pretom-areefin-pranto-a97651290/'
   },
   {
     title: 'GitHub',
-    href: 'https://github.com/ahnafnafee'
-  },
-  {
-    title: 'Google Scholar',
-    href: 'https://scholar.google.com/citations?user=u15DO0cAAAAJ&hl=en'
-  },
-  {
-    title: 'ORCID',
-    href: 'https://orcid.org/0009-0000-9363-4536'
-  },
-  {
-    title: 'Itch.io',
-    href: 'https://ahnafnafee.itch.io/'
-  },
-  {
-    title: 'ArtStation',
-    href: 'https://www.artstation.com/ahnafnafee'
-  },
-  {
-    title: 'Behance',
-    href: 'https://www.behance.net/ahnafannafee'
+    href: 'https://github.com/pretom26'
   },
   {
     title: 'Facebook',
-    href: 'https://www.facebook.com/ahnaf26/'
-  },
-  {
-    title: 'Instagram',
-    href: 'https://www.instagram.com/ahnaf_nafee/'
+    href: 'https://www.facebook.com/pretom.areefin.26'
   }
 ]
 

@@ -1,183 +1,347 @@
+
+import type { Metadata } from 'next'
+import Link from 'next/link'
+
 import { StarfieldBackground } from '@/components/site/StarfieldBackground'
+
+import {
+  SITE_AUTHOR,
+  SITE_NAME,
+  SITE_URL
+} from '@/libs/constants/site'
 
 import { generateOgImage } from '@/libs/metapage'
 
-import type { Metadata } from 'next'
+// ============================================
+// SECURITY POLICY CONFIGURATION
+// ============================================
 
-const SECURITY_OG_IMAGE = generateOgImage({
+const BASE_URL = SITE_URL.replace(/\/+$/, '')
+const PAGE_URL = `${BASE_URL}/security-policy`
+
+const PAGE_TITLE = `Security Policy | ${SITE_NAME}`
+
+const PAGE_DESCRIPTION =
+  'Security reporting and responsible disclosure information for the personal portfolio of Pretom Areefin Pranto.'
+
+const LINKEDIN_URL =
+  'https://www.linkedin.com/in/pretom-areefin-pranto-a97651290/'
+
+const OG_IMAGE = generateOgImage({
   title: 'Security Policy',
-  subTitle: 'Responsible Disclosure Guidelines',
+  subTitle: 'Responsible Vulnerability Reporting',
   type: 'page'
 })
 
+const GMAIL_URL = (() => {
+  const params = new URLSearchParams({
+    view: 'cm',
+    fs: '1',
+    to: SITE_AUTHOR.email,
+    su: 'Portfolio Security Report'
+  })
+
+  return `https://mail.google.com/mail/?${params.toString()}`
+})()
+
+// ============================================
+// SEO METADATA
+// ============================================
+
 export const metadata: Metadata = {
-  title: 'Security Policy - Ahnaf An Nafee',
-  description: 'Security policy and responsible disclosure guidelines for ahnafnafee.dev',
-  keywords: ['security policy', 'responsible disclosure', 'vulnerability reporting', 'ahnafnafee security'],
+  title: PAGE_TITLE,
+
+  description: PAGE_DESCRIPTION,
+
+  alternates: {
+    canonical: PAGE_URL
+  },
+
   openGraph: {
-    title: 'Security Policy - Ahnaf An Nafee',
-    description: 'Security policy and responsible disclosure guidelines for ahnafnafee.dev',
-    url: 'https://www.ahnafnafee.dev/security-policy',
-    siteName: 'Ahnaf An Nafee',
+    title: PAGE_TITLE,
+    description: PAGE_DESCRIPTION,
+    url: PAGE_URL,
+    siteName: SITE_NAME,
+    type: 'website',
     images: [
       {
-        url: SECURITY_OG_IMAGE,
+        url: OG_IMAGE,
         width: 1200,
         height: 600,
-        alt: 'Security Policy - Ahnaf An Nafee'
+        alt: PAGE_TITLE
       }
-    ],
-    locale: 'en_US',
-    type: 'website'
+    ]
   },
+
   twitter: {
     card: 'summary_large_image',
-    title: 'Security Policy - Ahnaf An Nafee',
-    description: 'Security policy and responsible disclosure guidelines for ahnafnafee.dev',
-    images: [SECURITY_OG_IMAGE]
+    title: PAGE_TITLE,
+    description: PAGE_DESCRIPTION,
+    images: [OG_IMAGE]
   }
 }
+
+// ============================================
+// SECURITY POLICY PAGE
+// ============================================
 
 export default function SecurityPolicyPage() {
   return (
     <>
       <StarfieldBackground />
+
       <main className='layout'>
-        <div className='mx-auto max-w-4xl py-8'>
-          <h1 className='mb-8 text-3xl font-bold tracking-tight text-black md:text-4xl dark:text-white'>
-            Security Policy
-          </h1>
+        <div className='mx-auto max-w-4xl py-10 md:py-14'>
 
-          <div className='prose prose-gray dark:prose-invert max-w-none'>
-            <section className='mb-8'>
-              <h2 className='mb-4 text-2xl font-semibold'>Reporting Security Vulnerabilities</h2>
-              <p className='mb-4'>
-                I take the security of my website and services seriously. If you discover a security vulnerability, I
-                appreciate your help in disclosing it to me in a responsible manner.
+          <header className='border-b border-gray-200 pb-8 dark:border-gray-800'>
+
+            <p className='text-xs font-semibold tracking-[0.2em] text-purple-600 uppercase dark:text-purple-300'>
+              WEBSITE INFORMATION / SECURITY
+            </p>
+
+            <h1 className='mt-4 text-3xl font-extrabold tracking-tight text-gray-950 md:text-5xl dark:text-white'>
+              Security Policy
+            </h1>
+
+            <p className='mt-5 max-w-3xl text-base leading-8 text-gray-600 dark:text-gray-300'>
+              Information about reporting potential
+              security issues affecting the personal
+              portfolio of {SITE_AUTHOR.name}.
+            </p>
+
+            <p className='mt-4 text-sm text-gray-500 dark:text-gray-400'>
+              Last updated: November 2, 2026
+            </p>
+
+          </header>
+
+          <div className='prose prose-gray dark:prose-invert mt-10 max-w-none'>
+
+            <section>
+              <h2>1. Reporting a Security Issue</h2>
+
+              <p>
+                If you notice a potential security
+                vulnerability or other security
+                concern affecting this website,
+                you are welcome to report it.
               </p>
 
-              <h3 className='mb-3 text-xl font-semibold'>How to Report</h3>
-              <ul className='mb-4 list-disc pl-6'>
-                <li>
-                  Email:{' '}
-                  <a href='mailto:ahnafnafee@gmail.com' className='text-link'>
-                    ahnafnafee@gmail.com
-                  </a>
-                </li>
-                <li>
-                  LinkedIn:{' '}
-                  <a href='https://www.linkedin.com/in/ahnafnafee' className='text-link'>
-                    linkedin.com/in/ahnafnafee
-                  </a>
-                </li>
-              </ul>
-            </section>
-
-            <section className='mb-8'>
-              <h2 className='mb-4 text-2xl font-semibold'>What to Include</h2>
-              <p className='mb-4'>Please include the following information in your report:</p>
-              <ul className='mb-4 list-disc pl-6'>
-                <li>Description of the vulnerability</li>
-                <li>Steps to reproduce the issue</li>
-                <li>Potential impact of the vulnerability</li>
-                <li>Any suggested fixes or mitigations</li>
-                <li>Your contact information for follow-up</li>
-              </ul>
-            </section>
-
-            <section className='mb-8'>
-              <h2 className='mb-4 text-2xl font-semibold'>Response Timeline</h2>
-              <ul className='mb-4 list-disc pl-6'>
-                <li>
-                  <strong>Initial Response:</strong> Within 48 hours of receiving your report
-                </li>
-                <li>
-                  <strong>Assessment:</strong> Within 7 days, I will assess the vulnerability and provide an initial
-                  response
-                </li>
-                <li>
-                  <strong>Resolution:</strong> Critical vulnerabilities will be addressed within 30 days
-                </li>
-                <li>
-                  <strong>Disclosure:</strong> After the vulnerability is fixed, we can discuss public disclosure
-                </li>
-              </ul>
-            </section>
-
-            <section className='mb-8'>
-              <h2 className='mb-4 text-2xl font-semibold'>Scope</h2>
-              <p className='mb-4'>This security policy applies to:</p>
-              <ul className='mb-4 list-disc pl-6'>
-                <li>
-                  The main website: <code>ahnafnafee.dev</code>
-                </li>
-                <li>
-                  All subdomains of <code>ahnafnafee.dev</code>
-                </li>
-                <li>Associated services and APIs</li>
-              </ul>
-            </section>
-
-            <section className='mb-8'>
-              <h2 className='mb-4 text-2xl font-semibold'>Out of Scope</h2>
-              <p className='mb-4'>The following are considered out of scope:</p>
-              <ul className='mb-4 list-disc pl-6'>
-                <li>Social engineering attacks</li>
-                <li>Physical attacks</li>
-                <li>Denial of Service (DoS) attacks</li>
-                <li>Issues in third-party services not directly controlled by me</li>
-                <li>Vulnerabilities requiring physical access to devices</li>
-              </ul>
-            </section>
-
-            <section className='mb-8'>
-              <h2 className='mb-4 text-2xl font-semibold'>Recognition</h2>
-              <p className='mb-4'>
-                I believe in recognizing security researchers who help improve the security of my services. With your
-                permission, I may acknowledge your contribution in:
+              <p>
+                Please use the contact information
+                below and provide enough detail
+                to help identify and understand
+                the issue.
               </p>
-              <ul className='mb-4 list-disc pl-6'>
-                <li>A security acknowledgments page</li>
-                <li>Social media recognition</li>
-                <li>Professional recommendations on LinkedIn</li>
-              </ul>
+
+              <p>
+                Avoid sharing vulnerability details
+                publicly before allowing a reasonable
+                opportunity to review the report.
+              </p>
             </section>
 
-            <section className='mb-8'>
-              <h2 className='mb-4 text-2xl font-semibold'>Legal</h2>
-              <p className='mb-4'>I will not pursue legal action against security researchers who:</p>
-              <ul className='mb-4 list-disc pl-6'>
-                <li>Follow responsible disclosure practices</li>
-                <li>Do not access or modify user data</li>
-                <li>Do not disrupt services</li>
-                <li>Report vulnerabilities in good faith</li>
-              </ul>
-            </section>
+            <section className='mt-10'>
+              <h2>2. How to Contact Me</h2>
 
-            <section className='mb-8'>
-              <h2 className='mb-4 text-2xl font-semibold'>Contact Information</h2>
-              <div className='rounded-lg bg-gray-50 p-4 dark:bg-gray-800'>
-                <p>
-                  <strong>Primary Contact:</strong>{' '}
-                  <a href='mailto:ahnafnafee@gmail.com' className='text-link'>
-                    ahnafnafee@gmail.com
+              <p>
+                The preferred reporting method
+                is email. You may also use my
+                LinkedIn profile for an initial
+                contact message.
+              </p>
+
+              <div className='not-prose mt-5 rounded-xl border border-purple-200 bg-purple-50 p-5 dark:border-purple-900 dark:bg-purple-950/20'>
+
+                <p className='font-semibold text-gray-950 dark:text-white'>
+                  {SITE_AUTHOR.name}
+                </p>
+
+                <p className='mt-2 break-all text-sm text-gray-700 dark:text-gray-300'>
+                  {SITE_AUTHOR.email}
+                </p>
+
+                <div className='mt-5 flex flex-wrap gap-3'>
+
+                  <a
+                    href={GMAIL_URL}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className='inline-flex rounded-lg bg-purple-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-purple-700'
+                  >
+                    Report via Gmail
                   </a>
-                </p>
-                <p>
-                  <strong>LinkedIn:</strong>{' '}
-                  <a href='https://www.linkedin.com/in/ahnafnafee' className='text-link'>
-                    linkedin.com/in/ahnafnafee
+
+                  <a
+                    href={LINKEDIN_URL}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className='inline-flex rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-semibold text-gray-900 hover:border-purple-400 dark:border-gray-700 dark:text-white'
+                  >
+                    LinkedIn
                   </a>
-                </p>
-                <p>
-                  <strong>Preferred Languages:</strong> English
-                </p>
-                <p>
-                  <strong>Last Updated:</strong> December 2024
-                </p>
+
+                </div>
+
               </div>
             </section>
+
+            <section className='mt-10'>
+              <h2>3. What to Include in a Report</h2>
+
+              <p>
+                When possible, please include:
+              </p>
+
+              <ul>
+                <li>A description of the suspected issue</li>
+                <li>The affected webpage or endpoint</li>
+                <li>Steps that demonstrate the issue without causing harm</li>
+                <li>The potential security impact</li>
+                <li>Relevant screenshots or diagnostic details</li>
+                <li>A contact method for follow-up</li>
+              </ul>
+
+              <p>
+                Please do not send passwords,
+                access tokens, or private user
+                information belonging to
+                someone else.
+              </p>
+            </section>
+
+            <section className='mt-10'>
+              <h2>4. Scope</h2>
+
+              <p>
+                This page concerns the public
+                pages and first-party functionality
+                of this personal portfolio at
+                its official deployed address.
+              </p>
+
+              <p>
+                External services, third-party
+                websites, and repositories linked
+                from this portfolio are not
+                automatically covered by this
+                policy.
+              </p>
+
+              <p>
+                Vulnerabilities in those services
+                should be reported through their
+                respective security channels.
+              </p>
+            </section>
+
+            <section className='mt-10'>
+              <h2>5. Responsible Reporting</h2>
+
+              <p>
+                Please avoid actions that could
+                interfere with the website,
+                its hosting services, or other
+                users.
+              </p>
+
+              <ul>
+                <li>Do not conduct denial-of-service or disruptive testing</li>
+                <li>Do not attempt to access another person&apos;s private data</li>
+                <li>Do not modify, delete, or download unauthorized information</li>
+                <li>Do not use social engineering or phishing</li>
+                <li>Do not perform intrusive automated testing without permission</li>
+              </ul>
+
+              <p>
+                This page is not blanket
+                authorization to conduct
+                penetration testing or other
+                intrusive security activities.
+              </p>
+            </section>
+
+            <section className='mt-10'>
+              <h2>6. Report Review and Follow-Up</h2>
+
+              <p>
+                Security reports may be reviewed
+                based on available information,
+                severity, and practical
+                remediation requirements.
+              </p>
+
+              <p>
+                Follow-up may be requested if
+                more information is necessary.
+              </p>
+
+              <p>
+                This personal portfolio does
+                not publish guaranteed response
+                or remediation deadlines.
+              </p>
+            </section>
+
+            <section className='mt-10'>
+              <h2>7. Disclosure and Recognition</h2>
+
+              <p>
+                If you would like to discuss
+                public disclosure of a reported
+                issue, please contact me first.
+              </p>
+
+              <p>
+                Any public acknowledgment or
+                recognition would be considered
+                individually and would require
+                the reporter&apos;s permission.
+              </p>
+
+              <p>
+                This page does not establish
+                a paid bug-bounty program or
+                promise a monetary reward.
+              </p>
+            </section>
+
+            <section className='mt-10'>
+              <h2>8. Additional Information</h2>
+
+              <p>
+                General questions can also
+                be submitted through my
+                Contact page.
+              </p>
+
+              <p>
+                For information about website
+                data handling, please read
+                the Privacy Policy.
+              </p>
+
+              <div className='not-prose mt-5 flex flex-wrap gap-3'>
+
+                <Link
+                  href='/contact'
+                  className='inline-flex rounded-lg bg-purple-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-purple-700'
+                >
+                  Contact Page
+                </Link>
+
+                <Link
+                  href='/privacy-policy'
+                  className='inline-flex rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-semibold text-gray-900 hover:border-purple-400 dark:border-gray-700 dark:text-white'
+                >
+                  Privacy Policy
+                </Link>
+
+              </div>
+            </section>
+
           </div>
+
         </div>
       </main>
     </>

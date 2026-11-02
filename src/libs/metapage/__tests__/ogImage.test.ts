@@ -1,3 +1,4 @@
+import { SITE_URL } from '@/libs/constants/site'
 import { generateOgImage } from '../ogImage'
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
@@ -18,7 +19,8 @@ describe('generateOgImage', () => {
 
   it('returns a URL pointing to /api/og on the canonical site by default', () => {
     const url = generateOgImage({ title: 'Hello' })
-    expect(url.startsWith('https://www.ahnafnafee.dev/api/og?')).toBe(true)
+    expect(new URL(url).origin).toBe(new URL(SITE_URL).origin)
+        expect(new URL(url).pathname).toBe('/api/og')
   })
 
   it('honors NEXT_PUBLIC_SITE_URL when set', () => {
@@ -63,7 +65,7 @@ describe('generateOgImage', () => {
   it('falls back to a default title when payload is empty-ish', () => {
     const url = generateOgImage({} as any)
     const params = new URL(url).searchParams
-    expect(params.get('title')).toBe('Ahnaf An Nafee')
+    expect(params.get('title')).toBe('Pretom Areefin Pranto')
   })
 
   it('emits a type param when provided', () => {

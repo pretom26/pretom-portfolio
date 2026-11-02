@@ -36,7 +36,7 @@ const config = [
     rules: {
       'no-unused-vars': 'off',
       'prefer-const': 'warn',
-      'import/no-duplicates': 'error'
+      'no-duplicate-imports': 'error'
     }
   }
 ]

@@ -1,8 +1,17 @@
+
 const { withAxiom } = require('next-axiom')
 
 const isDev = process.env.NODE_ENV === 'development'
+const isStaticExport = process.env.STATIC_EXPORT === 'true'
+const basePath = process.env.BASE_PATH || ''
 
-// https://nextjs.org/docs/advanced-features/security-headers
+// ============================================
+// SECURITY HEADERS
+// ============================================
+
+// Preserve existing security and third-party
+// compatibility settings.
+
 const ContentSecurityPolicy = `
     default-src 'self';
     script-src 'self' 'unsafe-eval' 'unsafe-inline' *.youtube.com *.twitter.com *.vercel-scripts.com giscus.app *.giscus.app *.googletagmanager.com cdn.jsdelivr.net pagead2.googlesyndication.com *.googlesyndication.com *.google.com *.googleadservices.com adservice.google.com *.gstatic.com *.doubleclick.net *.clarity.ms;
@@ -16,48 +25,43 @@ const ContentSecurityPolicy = `
 `
 
 const securityHeaders = [
-  // https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
   {
     key: 'Content-Security-Policy',
     value: ContentSecurityPolicy.replace(/\n/g, '')
   },
-  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
   {
     key: 'Referrer-Policy',
     value: 'origin-when-cross-origin'
   },
-  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
   {
     key: 'X-Frame-Options',
     value: 'DENY'
   },
-  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options
   {
     key: 'X-Content-Type-Options',
     value: 'nosniff'
   },
-  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-DNS-Prefetch-Control
   {
     key: 'X-DNS-Prefetch-Control',
     value: 'on'
   },
-  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security
   {
     key: 'Strict-Transport-Security',
     value: 'max-age=31536000; includeSubDomains; preload'
   },
-  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy
   {
     key: 'Permissions-Policy',
     value: 'camera=(), microphone=(), geolocation=()'
   }
 ]
 
-// @ducanh2912/next-pwa v10 ships v10 workbox defaults that mirror the legacy
-// next-pwa@5 cache.js (Google fonts, static assets, _next/image, _next/data,
-// same-origin /api/*, cross-origin). `extendDefaultRuntimeCaching: true`
-// preserves that behavior; v5 keys (skipWaiting, buildExcludes) move under
-// `workboxOptions`.
+// ============================================
+// PWA SUPPORT
+// ============================================
+
+// Preserve the existing progressive web app
+// behavior and Workbox caching configuration.
+
 const withPWA = require('@ducanh2912/next-pwa').default({
   dest: 'public',
   register: true,
@@ -65,37 +69,41 @@ const withPWA = require('@ducanh2912/next-pwa').default({
   extendDefaultRuntimeCaching: true,
   workboxOptions: {
     skipWaiting: true,
-    buildExcludes: [/chunks\/images\/.*$/, /chunks\/pages\/api\/.*/]
+    buildExcludes: [
+      /chunks\/images\/.*$/,
+      /chunks\/pages\/api\/.*/
+    ]
   }
 })
 
-const isStaticExport = process.env.STATIC_EXPORT === 'true'
-const basePath = process.env.BASE_PATH || ''
+// ============================================
+// NEXT.JS CONFIGURATION
+// ============================================
 
 /** @type {import('next').NextConfig} */
 const config = {
+  // Preserve optional static export support.
   ...(isStaticExport && {
     output: 'export',
     trailingSlash: true,
     ...(basePath && {
-      basePath: basePath,
+      basePath,
       assetPrefix: basePath
-    }),
-    images: {
-      unoptimized: true
-    }
+    })
   }),
+
+  // ==========================================
+  // IMAGE OPTIMIZATION
+  // ==========================================
+
   images: {
-    ...(isStaticExport && { unoptimized: true }),
+    ...(isStaticExport && {
+      unoptimized: true
+    }),
+
+    // Original author's personal domains removed.
+    // Other existing image providers retained.
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'www.ahnafnafee.dev'
-      },
-      {
-        protocol: 'https',
-        hostname: 'ahnafnafee.dev'
-      },
       {
         protocol: 'https',
         hostname: 'cdn.sanity.io'
@@ -133,31 +141,83 @@ const config = {
         hostname: 'mermaid.live'
       }
     ],
-    qualities: [25, 50, 60, 70, 75, 90, 100],
-    formats: ['image/webp', 'image/avif'],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    minimumCacheTTL: 31536000, // 1 year
+
+    qualities: [
+      25,
+      50,
+      60,
+      70,
+      75,
+      90,
+      100
+    ],
+
+    formats: [
+      'image/webp',
+      'image/avif'
+    ],
+
+    deviceSizes: [
+      640,
+      750,
+      828,
+      1080,
+      1200,
+      1920,
+      2048,
+      3840
+    ],
+
+    imageSizes: [
+      16,
+      32,
+      48,
+      64,
+      96,
+      128,
+      256,
+      384
+    ],
+
+    minimumCacheTTL: 31536000,
+
     dangerouslyAllowSVG: true,
-    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;"
+
+    contentSecurityPolicy:
+      "default-src 'self'; script-src 'none'; sandbox;"
   },
+
+  // ==========================================
+  // COMPILER
+  // ==========================================
+
   compiler: {
     removeConsole: !isDev,
     styledComponents: true
   },
+
   compress: true,
   poweredByHeader: false,
   generateEtags: true,
 
-  // Transpile mermaid and its dependencies to fix bundling issues
-  transpilePackages: ['mermaid', 'stylis'],
+  transpilePackages: [
+    'mermaid',
+    'stylis'
+  ],
 
-  // Ensure /api/og bundles its TTF fonts into the function output on Vercel
+  // Preserve Open Graph font tracing.
   outputFileTracingIncludes: {
-    '/api/og': ['./src/app/api/og/fonts/*.ttf']
+    '/api/og': [
+      './src/app/api/og/fonts/*.ttf'
+    ]
   },
 
+  // ==========================================
+  // TURBOPACK AND EXPERIMENTAL SETTINGS
+  // ==========================================
+
   turbopack: {},
+
   experimental: {
     optimizePackageImports: [
       '@vercel/analytics',
@@ -169,21 +229,40 @@ const config = {
       'stylis',
       'shiki'
     ],
-    webVitalsAttribution: ['CLS', 'LCP', 'INP', 'FCP', 'TTFB'],
+
+    webVitalsAttribution: [
+      'CLS',
+      'LCP',
+      'INP',
+      'FCP',
+      'TTFB'
+    ],
+
     scrollRestoration: true
   },
+
+  // ==========================================
+  // HTTP RESPONSE HEADERS
+  // ==========================================
+
   async headers() {
+    if (isStaticExport) {
+      return []
+    }
+
     return [
       {
         source: '/(.*)',
         headers: securityHeaders
       },
       {
-        source: '/(.*).(jpg|jpeg|png|gif|ico|svg|webp|avif)',
+        source:
+          '/(.*).(jpg|jpeg|png|gif|ico|svg|webp|avif)',
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable'
+            value:
+              'public, max-age=31536000, immutable'
           }
         ]
       },
@@ -192,7 +271,8 @@ const config = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable'
+            value:
+              'public, max-age=31536000, immutable'
           }
         ]
       },
@@ -201,96 +281,68 @@ const config = {
         headers: [
           {
             key: 'Content-Type',
-            value: 'application/xml; charset=utf-8'
+            value:
+              'application/xml; charset=utf-8'
           },
           {
             key: 'Cache-Control',
-            value: 'public, max-age=86400'
+            value:
+              'public, max-age=86400'
           }
         ]
       }
     ]
   },
-  async redirects() {
-    return [
-      // Canonical domain redirect
-      {
-        source: '/:path*',
-        has: [
-          {
-            type: 'host',
-            value: 'ahnafnafee.dev'
-          }
-        ],
-        destination: 'https://www.ahnafnafee.dev/:path*',
-        permanent: true
-      },
-      {
-        source: '/resume.pdf',
-        destination: '/AhnafAnNafeeResume.pdf',
-        permanent: true
-      },
 
+  // ==========================================
+  // PERSONALIZED REDIRECTS
+  // ==========================================
+
+  async redirects() {
+    // Next.js does not support server redirects
+    // in a fully static export.
+    if (isStaticExport) {
+      return []
+    }
+
+    return [
+      // Old shorthand URL for projects.
       {
         source: '/projects',
         destination: '/portfolio',
         permanent: true
       },
 
-      {
-        source: '/blog/mesh-decimation-benchmark',
-        destination: '/research/mesh-decimation-benchmark',
-        permanent: true
-      },
-
-      // SongMirror rename (formerly Omni Playlist Sync)
-      {
-        source: '/blog/spotify-playlist-mirror-sync',
-        destination: '/blog/songmirror-playlist-sync',
-        permanent: true
-      },
-
-      {
-        source: '/portfolio/omni-playlist-sync',
-        destination: '/portfolio/songmirror',
-        permanent: true
-      },
-
-      {
-        source: '/tags',
-        destination: '/blog/topics',
-        permanent: true
-      },
-      // Retired snippets section — closest surviving content lives on the blog.
-      {
-        source: '/snippet',
-        destination: '/blog',
-        permanent: true
-      },
-      {
-        source: '/snippet/:path*',
-        destination: '/blog',
-        permanent: true
-      },
+      // Short CV URL points to Pretom's PDF.
       {
         source: '/cv',
-        destination: '/AhnafAnNafeeResume.pdf',
+        destination: '/Resume_2026.pdf',
         permanent: true
       },
+
+      // Personal GitHub shorthand.
       {
         source: '/github',
-        destination: 'https://github.com/ahnafnafee',
+        destination:
+          'https://github.com/pretom26',
         permanent: true
       },
+
+      // Personal LinkedIn shorthand.
       {
         source: '/linkedin',
-        destination: 'https://www.linkedin.com/in/ahnafnafee',
+        destination:
+          'https://www.linkedin.com/in/pretom-areefin-pranto-a97651290/',
         permanent: true
       }
     ]
   }
 }
 
-module.exports = withAxiom(withPWA(config))
+// ============================================
+// EXPORT CONFIGURATION
+// ============================================
 
-// module.exports = config
+// Preserve Axiom and PWA integration.
+
+module.exports = withAxiom(withPWA(config))

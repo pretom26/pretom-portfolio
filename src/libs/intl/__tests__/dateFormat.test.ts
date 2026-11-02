@@ -23,7 +23,10 @@ describe('dateFormat', () => {
 describe('dateStringToISO', () => {
   it('converts MM/DD/YYYY to an ISO date string', () => {
     const iso = dateStringToISO('05/05/2024')
-    expect(iso).toMatch(/^2024-05-05T/)
+    const localDate = new Date(iso)
+    expect(localDate.getFullYear()).toBe(2024)
+    expect(localDate.getMonth()).toBe(4)
+    expect(localDate.getDate()).toBe(5)
     expect(iso.endsWith('Z')).toBe(true)
   })
 
