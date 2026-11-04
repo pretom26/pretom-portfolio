@@ -1,5 +1,8 @@
 <div align="center">
 
+#This is the main README of the original owner and designer of the portfolio website: Ahnaf An Nafee. A big thanks to him for his amazing work! I have added my own spin to it
+#Check out his guide for using the template
+
 # ahnafnafee.dev
 
 **An SEO-optimized personal portfolio + MDX blog template — Next.js 16 · React 19 · TypeScript · Tailwind CSS v4**
