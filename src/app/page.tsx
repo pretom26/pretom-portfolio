@@ -167,16 +167,18 @@ export default function HomePage() {
     <>
       <StarfieldBackground />
 
+
       {/* Structured data for SEO */}
       <script
         type='application/ld+json'
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(getPersonNode()).replace(
-            /</g,
-            '\\u003c'
-          )
+          __html: JSON.stringify({
+            ...getPersonNode(),
+            '@context': 'https://schema.org'
+          }).replace(/</g, '\\u003c')
         }}
       />
+
 
       <main
         className='layout relative'
