@@ -2,7 +2,7 @@
 
 > Computer Science undergraduate at BRAC University specializing in Machine Learning, Healthcare AI, and Software Engineering.
 
-Website: http://localhost:3000
+Website: https://pretom-portfolio.vercel.app
 
 This document is a curated overview of the public portfolio.
 It is not a verbatim reproduction of every page or individual project.
@@ -24,49 +24,49 @@ The portfolio covers academic research, software applications, and practical tec
 
 ### Home
 
-URL: http://localhost:3000/
+URL: https://pretom-portfolio.vercel.app/
 
 Introduction to Pretom Areefin Pranto, academic background, professional focus, research interests, and selected work.
 
 ### Research
 
-URL: http://localhost:3000/research
+URL: https://pretom-portfolio.vercel.app/research
 
 Research and academic projects involving machine learning, healthcare AI, computational methods, and related technical topics.
 
 ### Portfolio
 
-URL: http://localhost:3000/portfolio
+URL: https://pretom-portfolio.vercel.app/portfolio
 
 Software engineering, machine learning, and academic project showcase with descriptions, technologies, and available external links.
 
 ### About
 
-URL: http://localhost:3000/about
+URL: https://pretom-portfolio.vercel.app/about
 
 Academic background at BRAC University, technical interests, professional experience, and personal introduction.
 
 ### Resume
 
-URL: http://localhost:3000/resume
+URL: https://pretom-portfolio.vercel.app/resume
 
 Professional resume with education, experience, technical skills, academic projects, and research activities.
 
 ### Contact
 
-URL: http://localhost:3000/contact
+URL: https://pretom-portfolio.vercel.app/contact
 
 Contact information, GitHub and LinkedIn profiles, and opportunities for professional or research collaboration.
 
 ### Privacy Policy
 
-URL: http://localhost:3000/privacy-policy
+URL: https://pretom-portfolio.vercel.app/privacy-policy
 
 Information about technical data, external services, privacy choices, and contact.
 
 ### Security Policy
 
-URL: http://localhost:3000/security-policy
+URL: https://pretom-portfolio.vercel.app/security-policy
 
 Guidance for reporting security concerns related to the personal portfolio.
 

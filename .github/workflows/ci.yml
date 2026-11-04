@@ -56,7 +56,7 @@ jobs:
         run: yarn build
         env:
           # Skip Vercel-specific env. The build only needs to compile + generate sitemap.
-          NEXT_PUBLIC_SITE_URL: https://www.ahnafnafee.dev
+          NEXT_PUBLIC_SITE_URL: https://pretom-portfolio.vercel.app/
           # PWA / service worker generation is fine on CI; no secrets required.
           NEXT_TELEMETRY_DISABLED: '1'
 

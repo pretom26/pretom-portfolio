@@ -70,7 +70,8 @@ jobs:
         # window, with a hard 5-min ceiling. Avoids submitting URLs that 404.
         run: |
           for i in $(seq 1 30); do
-            if curl -fsSL https://www.ahnafnafee.dev/sitemap.xml > /dev/null; then
+            if curl -fsSL https://pretom-portfolio.vercel.app/sitemap.xml > /dev/null; then
+
               echo "sitemap reachable on attempt $i"
               break
             fi

@@ -4,12 +4,12 @@
 
 ## Main Pages
 
-- [Home](http://localhost:3000/): Introduction to Pretom Areefin Pranto, academic background, professional focus, research interests, and selected work.
-- [Research](http://localhost:3000/research): Research and academic projects involving machine learning, healthcare AI, computational methods, and related technical topics.
-- [Portfolio](http://localhost:3000/portfolio): Software engineering, machine learning, and academic project showcase with descriptions, technologies, and available external links.
-- [About](http://localhost:3000/about): Academic background at BRAC University, technical interests, professional experience, and personal introduction.
-- [Resume](http://localhost:3000/resume): Professional resume with education, experience, technical skills, academic projects, and research activities.
-- [Contact](http://localhost:3000/contact): Contact information, GitHub and LinkedIn profiles, and opportunities for professional or research collaboration.
+- [Home](https://pretom-portfolio.vercel.app/): Introduction to Pretom Areefin Pranto, academic background, professional focus, research interests, and selected work.
+- [Research](https://pretom-portfolio.vercel.app/research): Research and academic projects involving machine learning, healthcare AI, computational methods, and related technical topics.
+- [Portfolio](https://pretom-portfolio.vercel.app/portfolio): Software engineering, machine learning, and academic project showcase with descriptions, technologies, and available external links.
+- [About](https://pretom-portfolio.vercel.app/about): Academic background at BRAC University, technical interests, professional experience, and personal introduction.
+- [Resume](https://pretom-portfolio.vercel.app/resume): Professional resume with education, experience, technical skills, academic projects, and research activities.
+- [Contact](https://pretom-portfolio.vercel.app/contact): Contact information, GitHub and LinkedIn profiles, and opportunities for professional or research collaboration.
 
 ## Research and Project Discovery
 
@@ -21,21 +21,21 @@ The academic work includes the completed NeuroVentura undergraduate thesis.
 
 ## Resume
 
-- [Resume Page](http://localhost:3000/resume)
-- [Resume PDF](http://localhost:3000/Resume_2026.pdf)
+- [Resume Page](https://pretom-portfolio.vercel.app/resume)
+- [Resume PDF](https://pretom-portfolio.vercel.app/Resume_2026.pdf)
 
 ## Website Policies
 
-- [Privacy Policy](http://localhost:3000/privacy-policy): Information about technical data, external services, privacy choices, and contact.
-- [Security Policy](http://localhost:3000/security-policy): Guidance for reporting security concerns related to the personal portfolio.
+- [Privacy Policy](https://pretom-portfolio.vercel.app/privacy-policy): Information about technical data, external services, privacy choices, and contact.
+- [Security Policy](https://pretom-portfolio.vercel.app/security-policy): Guidance for reporting security concerns related to the personal portfolio.
 
 ## Additional Information
 
 - [GitHub](https://github.com/pretom26)
 - [LinkedIn](https://www.linkedin.com/in/pretom-areefin-pranto-a97651290/)
 - Contact email: pretomareefin@gmail.com
-- [Sitemap](http://localhost:3000/sitemap.xml)
-- [Curated Site Summary](http://localhost:3000/llms-full.txt)
+- [Sitemap](https://pretom-portfolio.vercel.app/sitemap.xml)
+- [Curated Site Summary](https://pretom-portfolio.vercel.app/llms-full.txt)
 
 ## Content Notes
 
