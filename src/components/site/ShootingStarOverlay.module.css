@@ -1,0 +1,298 @@
+
+/* =========================================
+   FREE-MOVING COSMIC SHOOTING STARS
+   Four independent natural trajectories
+   ========================================= */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* =========================================
+   BASE METEOR
+   ========================================= */
+
+.meteor {
+  position: absolute;
+
+  width: 120px;
+  height: 2.5px;
+
+  border-radius: 999px;
+  opacity: 0;
+
+  transform-origin: right center;
+
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(139, 92, 246, 0.08) 18%,
+    rgba(139, 92, 246, 0.30) 48%,
+    rgba(167, 139, 250, 0.72) 80%,
+    rgba(237, 233, 254, 0.98) 100%
+  );
+
+  box-shadow:
+    0 0 5px rgba(139, 92, 246, 0.28),
+    0 0 11px rgba(167, 139, 250, 0.14);
+
+  animation-name: meteor-flight;
+  animation-duration: var(--cycle);
+  animation-delay: var(--delay);
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+
+  will-change: transform, opacity;
+}
+
+/* =========================================
+   GLOWING STAR HEAD
+   ========================================= */
+
+.meteor::after {
+  content: '';
+
+  position: absolute;
+  top: 50%;
+  right: 0;
+
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+
+  background: #ede9fe;
+
+  box-shadow:
+    0 0 6px 1px rgba(167, 139, 250, 0.75),
+    0 0 14px 2px rgba(139, 92, 246, 0.30);
+
+  transform: translateY(-50%);
+}
+
+/* =========================================
+   DARK MODE
+   ========================================= */
+
+:global(.dark) .meteor {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(167, 139, 250, 0.08) 18%,
+    rgba(196, 181, 253, 0.35) 48%,
+    rgba(221, 214, 254, 0.75) 80%,
+    rgba(255, 255, 255, 0.98) 100%
+  );
+
+  box-shadow:
+    0 0 7px rgba(167, 139, 250, 0.3),
+    0 0 14px rgba(167, 139, 250, 0.12);
+}
+
+:global(.dark) .meteor::after {
+  background: #ffffff;
+
+  box-shadow:
+    0 0 7px 1px rgba(221, 214, 254, 0.8),
+    0 0 15px 2px rgba(167, 139, 250, 0.35);
+}
+
+/* =========================================
+   STAR 1
+   Upper-left -> central-right
+   ========================================= */
+
+.meteorOne {
+  top: 8%;
+  left: 3%;
+  width: 130px;
+
+  --angle: 35deg;
+  --dx: 52vw;
+  --dy: 36vh;
+
+  --cycle: 12s;
+  --delay: 0s;
+}
+
+/* =========================================
+   STAR 2
+   Middle-right -> lower-left
+   ========================================= */
+
+
+.meteorTwo {
+  top: 60%;
+  right: 5%;
+  width: 115px;
+
+  --angle: 153deg;
+  --dx: -56vw;
+  --dy: 26vh;
+
+  --cycle: 13s;
+  --delay: -5.5s;
+}
+
+
+/* =========================================
+   STAR 3
+   Lower-left -> upper-right
+   ========================================= */
+
+.meteorThree {
+  bottom: 9%;
+  left: 6%;
+
+  width: 125px;
+
+  --angle: -40deg;
+  --dx: 47vw;
+  --dy: -40vh;
+
+  --cycle: 15s;
+  --delay: 6.8s;
+}
+
+/* =========================================
+   STAR 4
+   Lower-right -> upper-left
+   ========================================= */
+
+.meteorFour {
+  bottom: 25%;
+  right: 7%;
+
+  width: 135px;
+
+  --angle: 215deg;
+  --dx: -42vw;
+  --dy: -30vh;
+
+  --cycle: 16.5s;
+  --delay: 10.2s;
+}
+
+/* =========================================
+   SMOOTH FREE-FLIGHT ANIMATION
+   ========================================= */
+
+@keyframes meteor-flight {
+  0% {
+    opacity: 0;
+
+    transform:
+      translate3d(0, 0, 0)
+      rotate(var(--angle));
+  }
+
+  5% {
+    opacity: 0.6;
+  }
+
+  11% {
+    opacity: 0.9;
+  }
+
+  21% {
+    opacity: 0.85;
+  }
+
+  28% {
+    opacity: 0.4;
+  }
+
+  32% {
+    opacity: 0;
+
+    transform:
+      translate3d(
+        var(--dx),
+        var(--dy),
+        0
+      )
+      rotate(var(--angle));
+  }
+
+  100% {
+    opacity: 0;
+
+    transform:
+      translate3d(
+        var(--dx),
+        var(--dy),
+        0
+      )
+      rotate(var(--angle));
+  }
+}
+
+/* =========================================
+   MOBILE ADJUSTMENTS
+   ========================================= */
+
+@media (max-width: 640px) {
+  .meteor {
+    width: 85px;
+    height: 2px;
+  }
+
+  .meteor::after {
+    width: 4px;
+    height: 4px;
+  }
+
+  .meteorOne {
+    top: 23%;
+    left: 2%;
+    width: 92px;
+
+    --dx: 57vw;
+    --dy: 30vh;
+  }
+
+  .meteorTwo {
+    top: 55%;
+    right: 3%;
+    width: 82px;
+
+    --dx: -57vw;
+    --dy: 24vh;
+  }
+
+  .meteorThree {
+    bottom: 7%;
+    left: 4%;
+    width: 88px;
+
+    --dx: 57vw;
+    --dy: -35vh;
+  }
+
+  .meteorFour {
+    bottom: 26%;
+    right: 3%;
+    width: 96px;
+
+    --dx: -50vw;
+    --dy: -28vh;
+  }
+}
+
+/* =========================================
+   ACCESSIBILITY
+   ========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .meteor {
+    display: none;
+    animation: none;
+  }
+}

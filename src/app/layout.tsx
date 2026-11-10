@@ -1,13 +1,17 @@
+
+import { ShootingStarOverlay } from '@/components/site/ShootingStarOverlay'
 import { Footer, Header } from '@/components/site/common'
 import { Toaster } from '@/components/ui/sonner'
 
-import { PERSON_ID, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from '@/libs/constants/site'
-
-
+import {
+  PERSON_ID,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_URL
+} from '@/libs/constants/site'
 
 import type { Viewport } from 'next'
 import { ThemeProvider } from 'next-themes'
-
 
 import '@/styles/globals.css'
 import '@/styles/prism-themes.css'
@@ -18,26 +22,36 @@ const GOOGLE_FONTS_HREF =
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: '#171717' }
+    {
+      media: '(prefers-color-scheme: light)',
+      color: '#ffffff'
+    },
+    {
+      media: '(prefers-color-scheme: dark)',
+      color: '#171717'
+    }
   ],
   width: 'device-width',
   initialScale: 1,
   colorScheme: 'light dark'
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  // WebSite schema with SearchAction for sitelinks search box
+export default function RootLayout({
+  children
+}: {
+  children: React.ReactNode
+}) {
   const websiteJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: SITE_NAME,
     url: SITE_URL,
     description: SITE_DESCRIPTION,
-    author: { '@id': PERSON_ID }
+    author: {
+      '@id': PERSON_ID
+    }
   }
 
-  // SiteNavigationElement schema for sitelinks
   const navigationJsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -46,11 +60,26 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         '@id': `${SITE_URL}/#navigation`,
         name: 'Main Navigation',
         hasPart: [
-          { '@type': 'SiteNavigationElement', name: 'Home', url: SITE_URL },
-          { '@type': 'SiteNavigationElement', name: 'Research', url: `${SITE_URL}/research` },
-
-          { '@type': 'SiteNavigationElement', name: 'Portfolio', url: `${SITE_URL}/portfolio` },
-          { '@type': 'SiteNavigationElement', name: 'Resume', url: `${SITE_URL}/resume` }
+          {
+            '@type': 'SiteNavigationElement',
+            name: 'Home',
+            url: SITE_URL
+          },
+          {
+            '@type': 'SiteNavigationElement',
+            name: 'Research',
+            url: `${SITE_URL}/research`
+          },
+          {
+            '@type': 'SiteNavigationElement',
+            name: 'Portfolio',
+            url: `${SITE_URL}/portfolio`
+          },
+          {
+            '@type': 'SiteNavigationElement',
+            name: 'Resume',
+            url: `${SITE_URL}/resume`
+          }
         ]
       }
     ]
@@ -59,38 +88,90 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang='en' suppressHydrationWarning>
       <head>
-        {/* Google Sans Text — primary site font; local Inter @font-face stays as a fallback in globals.css */}
-        <link rel='preconnect' href='https://fonts.googleapis.com' />
-        <link rel='preconnect' href='https://fonts.gstatic.com' crossOrigin='anonymous' />
-        <link rel='stylesheet' href={GOOGLE_FONTS_HREF} />
+        {/* Google Sans Text */}
+        <link
+          rel='preconnect'
+          href='https://fonts.googleapis.com'
+        />
 
-        {/* IndieAuth / Mastodon / Bluesky identity links — verifiable backlinks
-            that cement the canonical Person entity across the federated web. */}
-        <link rel='me' href='https://github.com/pretom26' />
-        <link rel='me' href='https://www.linkedin.com/in/pretom-areefin-pranto-a97651290/' />
-        <link rel='me' href='https://scholar.google.com/citations?user=u15DO0cAAAAJ&hl=en' />
-        <link rel='me' href='https://orcid.org/0009-0000-9363-4536' />
-        <link rel='author' href={`${SITE_URL}/resume`} />
+        <link
+          rel='preconnect'
+          href='https://fonts.gstatic.com'
+          crossOrigin='anonymous'
+        />
 
+        <link
+          rel='stylesheet'
+          href={GOOGLE_FONTS_HREF}
+        />
 
+        {/* Identity links */}
+        <link
+          rel='me'
+          href='https://github.com/pretom26'
+        />
+
+        <link
+          rel='me'
+          href='https://www.linkedin.com/in/pretom-areefin-pranto-a97651290/'
+        />
+
+        <link
+          rel='me'
+          href='https://scholar.google.com/citations?user=u15DO0cAAAAJ&hl=en'
+        />
+
+        <link
+          rel='me'
+          href='https://orcid.org/0009-0000-9363-4536'
+        />
+
+        <link
+          rel='author'
+          href={`${SITE_URL}/resume`}
+        />
       </head>
+
       <body suppressHydrationWarning>
-        <script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} />
-        <script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify(navigationJsonLd) }} />
-        <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
-          {/* Full-height column: content takes the leftover space so the footer sits at the bottom of short pages. */}
-          <div className='flex min-h-dvh flex-col'>
+        {/* Structured data */}
+        <script
+          type='application/ld+json'
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(websiteJsonLd)
+          }}
+        />
+
+        <script
+          type='application/ld+json'
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(navigationJsonLd)
+          }}
+        />
+
+        <ThemeProvider
+          attribute='class'
+          defaultTheme='system'
+          enableSystem
+        >
+          {/* Decorative shooting stars */}
+          <ShootingStarOverlay />
+
+          {/* Website content remains above the stars */}
+          <div className='relative z-10 flex min-h-dvh flex-col'>
             <Header />
-            <div className='flex-1'>{children}</div>
+
+            <div className='flex-1'>
+              {children}
+            </div>
+
             <Footer />
           </div>
-          <Toaster position='bottom-center' richColors />
 
-
-
-
-
-
+          {/* Existing notifications */}
+          <Toaster
+            position='bottom-center'
+            richColors
+          />
         </ThemeProvider>
       </body>
     </html>
